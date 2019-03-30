@@ -21,7 +21,7 @@ JSON
 
 The live Inverter information:
 1.  Power in Watt
-2.  Voltage to the Grid
+2.  Voltage to the grid
 3.  Ampere to the grid
 4.  Internal temperature in Celcius
 5.  Daily yield in kWh
