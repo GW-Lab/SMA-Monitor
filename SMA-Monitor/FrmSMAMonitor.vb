@@ -20,7 +20,6 @@ Imports GWIungo
 
 Public Class FrmSMAMonitor
    Private ReadOnly RemoveSignBitmask As Byte = &B0111_1111
-   ' frmSettings As FrmSettings
 
    Private SB3600TL As ModBusClient
    Private iungo As IungoClient
