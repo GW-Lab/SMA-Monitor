@@ -27,7 +27,6 @@ Public Class ModBusBase : Inherits TcpClient
       Dim result = BeginConnect(IPAddress, Port, Nothing, Nothing)
 
       If result.AsyncWaitHandle.WaitOne(ConnectionTimeout) Then
-         '  EndConnect(result)                                                                        ' End a pending async-connection attempt
          Me.networkStream = GetStream()
          Me.networkStream.ReadTimeout = ConnectionTimeout
 

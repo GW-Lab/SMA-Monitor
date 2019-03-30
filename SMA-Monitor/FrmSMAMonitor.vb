@@ -84,10 +84,9 @@ Public Class FrmSMAMonitor
 
    Private Async Sub TmrMain_TickAsync(sender As Object, e As EventArgs) Handles TmrMain.Tick
       Try
-         Me.SB3600TL = New ModBusClient(3, Net.IPAddress.Parse(My.Settings.IPAddress), 502)
+         Me.SB3600TL = New ModBusClient(My.Settings.ModBusID, Net.IPAddress.Parse(My.Settings.IPAddress), 502)
          Me.SB3600TL.Connect()
 
-         '  If LblStatusValue.BackColor = Color.Green Then
          Select Case ConvertRegistersToInt(Await Me.SB3600TL.ReadInputRegistersAsync(30201, 2))
             Case SB3600TLStatus.Ok
                LblStatusValue.BackColor = Color.Green
@@ -98,7 +97,7 @@ Public Class FrmSMAMonitor
                   power(0) = power(0) And Me.RemoveSignBitmask                                                                                                 ' Remove sign bit
                   LblSunPowerVal.Text = ConvertRegistersToInt(power).ToString()                                                                                 ' Power in W(att)
 
-                  LblUsedPowerVal.Text = (Me.iungo.Electricity("usage").Energy.Current + ConvertRegistersToInt(power)).ToString
+                  '     LblUsedPowerVal.Text = (Me.iungo.Electricity("usage").Energy.Current + ConvertRegistersToInt(power)).ToString
 
                   Dim totalUsedPower = CInt(LblSunPowerVal.Text) - CDbl(LblUsedPowerVal.Text)
 
@@ -133,6 +132,7 @@ Public Class FrmSMAMonitor
                         LblTotalYieldValue.Text = (ConvertRegistersToLong(Await Me.SB3600TL.ReadInputRegistersAsync(30513, 4)) / 1000000).ToString("##0.00")  ' MWh
                         Me.Display = DisplayItem.Volt
                   End Select
+
                   Me.DisplayPower = True
                End If
             Case SB3600TLStatus.Fault

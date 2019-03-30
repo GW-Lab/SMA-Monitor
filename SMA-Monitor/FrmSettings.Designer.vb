@@ -30,14 +30,17 @@ Partial Class FrmSettings
       Me.LblIntervalSeconds = New System.Windows.Forms.Label()
       Me.NudInverval = New System.Windows.Forms.NumericUpDown()
       Me.IpBox1 = New GWIPBox.IPBox()
+      Me.Label2 = New System.Windows.Forms.Label()
+      Me.NudModBusID = New System.Windows.Forms.NumericUpDown()
       CType(Me.NudInverval, System.ComponentModel.ISupportInitialize).BeginInit()
+      CType(Me.NudModBusID, System.ComponentModel.ISupportInitialize).BeginInit()
       Me.SuspendLayout()
       '
       'btnOK
       '
-      Me.btnOK.Location = New System.Drawing.Point(132, 56)
+      Me.btnOK.Location = New System.Drawing.Point(128, 83)
       Me.btnOK.Name = "btnOK"
-      Me.btnOK.Size = New System.Drawing.Size(43, 23)
+      Me.btnOK.Size = New System.Drawing.Size(47, 23)
       Me.btnOK.TabIndex = 1
       Me.btnOK.Text = "OK"
       Me.btnOK.UseVisualStyleBackColor = True
@@ -54,7 +57,7 @@ Partial Class FrmSettings
       'ChkTopMost
       '
       Me.ChkTopMost.AutoSize = True
-      Me.ChkTopMost.Location = New System.Drawing.Point(5, 60)
+      Me.ChkTopMost.Location = New System.Drawing.Point(5, 87)
       Me.ChkTopMost.Name = "ChkTopMost"
       Me.ChkTopMost.Size = New System.Drawing.Size(70, 17)
       Me.ChkTopMost.TabIndex = 3
@@ -64,7 +67,7 @@ Partial Class FrmSettings
       'LblInterval
       '
       Me.LblInterval.AutoSize = True
-      Me.LblInterval.Location = New System.Drawing.Point(2, 35)
+      Me.LblInterval.Location = New System.Drawing.Point(2, 63)
       Me.LblInterval.Name = "LblInterval"
       Me.LblInterval.Size = New System.Drawing.Size(45, 13)
       Me.LblInterval.TabIndex = 4
@@ -73,7 +76,7 @@ Partial Class FrmSettings
       'LblIntervalSeconds
       '
       Me.LblIntervalSeconds.AutoSize = True
-      Me.LblIntervalSeconds.Location = New System.Drawing.Point(125, 32)
+      Me.LblIntervalSeconds.Location = New System.Drawing.Point(125, 60)
       Me.LblIntervalSeconds.Name = "LblIntervalSeconds"
       Me.LblIntervalSeconds.Size = New System.Drawing.Size(49, 13)
       Me.LblIntervalSeconds.TabIndex = 5
@@ -81,7 +84,7 @@ Partial Class FrmSettings
       '
       'NudInverval
       '
-      Me.NudInverval.Location = New System.Drawing.Point(78, 32)
+      Me.NudInverval.Location = New System.Drawing.Point(78, 59)
       Me.NudInverval.Maximum = New Decimal(New Integer() {60, 0, 0, 0})
       Me.NudInverval.Minimum = New Decimal(New Integer() {5, 0, 0, 0})
       Me.NudInverval.Name = "NudInverval"
@@ -98,12 +101,33 @@ Partial Class FrmSettings
       Me.IpBox1.Size = New System.Drawing.Size(119, 27)
       Me.IpBox1.TabIndex = 7
       '
+      'Label2
+      '
+      Me.Label2.AutoSize = True
+      Me.Label2.Location = New System.Drawing.Point(2, 37)
+      Me.Label2.Name = "Label2"
+      Me.Label2.Size = New System.Drawing.Size(63, 13)
+      Me.Label2.TabIndex = 8
+      Me.Label2.Text = "ModBus ID:"
+      '
+      'NudModBusID
+      '
+      Me.NudModBusID.Location = New System.Drawing.Point(78, 32)
+      Me.NudModBusID.Maximum = New Decimal(New Integer() {30, 0, 0, 0})
+      Me.NudModBusID.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+      Me.NudModBusID.Name = "NudModBusID"
+      Me.NudModBusID.Size = New System.Drawing.Size(41, 20)
+      Me.NudModBusID.TabIndex = 9
+      Me.NudModBusID.Value = New Decimal(New Integer() {3, 0, 0, 0})
+      '
       'FrmSettings
       '
       Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
       Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-      Me.ClientSize = New System.Drawing.Size(181, 83)
+      Me.ClientSize = New System.Drawing.Size(181, 111)
       Me.ControlBox = False
+      Me.Controls.Add(Me.NudModBusID)
+      Me.Controls.Add(Me.Label2)
       Me.Controls.Add(Me.IpBox1)
       Me.Controls.Add(Me.NudInverval)
       Me.Controls.Add(Me.LblIntervalSeconds)
@@ -116,6 +140,7 @@ Partial Class FrmSettings
       Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
       Me.Text = "Settings"
       CType(Me.NudInverval, System.ComponentModel.ISupportInitialize).EndInit()
+      CType(Me.NudModBusID, System.ComponentModel.ISupportInitialize).EndInit()
       Me.ResumeLayout(False)
       Me.PerformLayout()
 
@@ -128,6 +153,8 @@ Partial Class FrmSettings
    Friend WithEvents LblIntervalSeconds As Label
    Friend WithEvents NudInverval As NumericUpDown
    Friend WithEvents IpBox1 As GWIPBox.IPBox
+   Friend WithEvents Label2 As Label
+   Friend WithEvents NudModBusID As NumericUpDown
 
    '  Friend WithEvents IpAddressControl1 As IPAddressControlLib.IPAddressControl
 End Class
