@@ -20,7 +20,7 @@ Imports GWIungo
 
 Public Class FrmSMAMonitor
    Private ReadOnly RemoveSignBitmask As Byte = &B0111_1111
-   Private frmSettings As FrmSettings
+   ' frmSettings As FrmSettings
 
    Private SB3600TL As ModBusClient
    Private iungo As IungoClient
@@ -97,7 +97,7 @@ Public Class FrmSMAMonitor
                   power(0) = power(0) And Me.RemoveSignBitmask                                                                                                 ' Remove sign bit
                   LblSunPowerVal.Text = ConvertRegistersToInt(power).ToString()                                                                                 ' Power in W(att)
 
-                  '     LblUsedPowerVal.Text = (Me.iungo.Electricity("usage").Energy.Current + ConvertRegistersToInt(power)).ToString
+                  LblUsedPowerVal.Text = (Me.iungo.Electricity("usage").Energy.Current + ConvertRegistersToInt(power)).ToString
 
                   Dim totalUsedPower = CInt(LblSunPowerVal.Text) - CDbl(LblUsedPowerVal.Text)
 
@@ -155,8 +155,8 @@ Public Class FrmSMAMonitor
    End Sub
 
    Private Sub MnuSettings_Click(sender As Object, e As EventArgs) Handles MnuSettings.Click
-      Me.frmSettings = New FrmSettings(Me)
-      Me.frmSettings.Show(Me)
+      Dim frmSettings = New FrmSettings(Me)
+      frmSettings.Show()
    End Sub
 
    Private Sub MnuExit_Click(sender As Object, e As EventArgs) Handles MnuExit.Click

@@ -1,12 +1,11 @@
 ﻿Public Class FrmSettings
    Private ReadOnly frm As FrmSMAMonitor
+   '  Public Event Interval_Changed(interval As Integer)
 
    Public Sub New(frm As FrmSMAMonitor)
-      ' This call is required by the designer.
-      InitializeComponent()
+      InitializeComponent() ' This call is required by the designer.
 
-      ' Add any initialization after the InitializeComponent() call.
-      Me.frm = frm
+      Me.frm = frm ' Add any initialization after the InitializeComponent() call.
    End Sub
 
    Private Sub FrmSettings_Load(sender As Object, e As EventArgs) Handles Me.Load

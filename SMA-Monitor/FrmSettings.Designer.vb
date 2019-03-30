@@ -26,7 +26,7 @@ Partial Class FrmSettings
       Me.btnOK = New System.Windows.Forms.Button()
       Me.Label1 = New System.Windows.Forms.Label()
       Me.ChkTopMost = New System.Windows.Forms.CheckBox()
-      Me.LblInterval = New System.Windows.Forms.Label()
+      Me.LblPollingInterval = New System.Windows.Forms.Label()
       Me.LblIntervalSeconds = New System.Windows.Forms.Label()
       Me.NudInverval = New System.Windows.Forms.NumericUpDown()
       Me.IpBox1 = New GWIPBox.IPBox()
@@ -64,19 +64,19 @@ Partial Class FrmSettings
       Me.ChkTopMost.Text = "Top most"
       Me.ChkTopMost.UseVisualStyleBackColor = True
       '
-      'LblInterval
+      'LblPollingInterval
       '
-      Me.LblInterval.AutoSize = True
-      Me.LblInterval.Location = New System.Drawing.Point(2, 63)
-      Me.LblInterval.Name = "LblInterval"
-      Me.LblInterval.Size = New System.Drawing.Size(45, 13)
-      Me.LblInterval.TabIndex = 4
-      Me.LblInterval.Text = "Interval:"
+      Me.LblPollingInterval.AutoSize = True
+      Me.LblPollingInterval.Location = New System.Drawing.Point(2, 63)
+      Me.LblPollingInterval.Name = "LblPollingInterval"
+      Me.LblPollingInterval.Size = New System.Drawing.Size(79, 13)
+      Me.LblPollingInterval.TabIndex = 4
+      Me.LblPollingInterval.Text = "Polling Interval:"
       '
       'LblIntervalSeconds
       '
       Me.LblIntervalSeconds.AutoSize = True
-      Me.LblIntervalSeconds.Location = New System.Drawing.Point(125, 60)
+      Me.LblIntervalSeconds.Location = New System.Drawing.Point(129, 60)
       Me.LblIntervalSeconds.Name = "LblIntervalSeconds"
       Me.LblIntervalSeconds.Size = New System.Drawing.Size(49, 13)
       Me.LblIntervalSeconds.TabIndex = 5
@@ -84,7 +84,7 @@ Partial Class FrmSettings
       '
       'NudInverval
       '
-      Me.NudInverval.Location = New System.Drawing.Point(78, 59)
+      Me.NudInverval.Location = New System.Drawing.Point(83, 59)
       Me.NudInverval.Maximum = New Decimal(New Integer() {60, 0, 0, 0})
       Me.NudInverval.Minimum = New Decimal(New Integer() {5, 0, 0, 0})
       Me.NudInverval.Name = "NudInverval"
@@ -112,7 +112,7 @@ Partial Class FrmSettings
       '
       'NudModBusID
       '
-      Me.NudModBusID.Location = New System.Drawing.Point(78, 32)
+      Me.NudModBusID.Location = New System.Drawing.Point(83, 32)
       Me.NudModBusID.Maximum = New Decimal(New Integer() {30, 0, 0, 0})
       Me.NudModBusID.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
       Me.NudModBusID.Name = "NudModBusID"
@@ -131,7 +131,7 @@ Partial Class FrmSettings
       Me.Controls.Add(Me.IpBox1)
       Me.Controls.Add(Me.NudInverval)
       Me.Controls.Add(Me.LblIntervalSeconds)
-      Me.Controls.Add(Me.LblInterval)
+      Me.Controls.Add(Me.LblPollingInterval)
       Me.Controls.Add(Me.ChkTopMost)
       Me.Controls.Add(Me.Label1)
       Me.Controls.Add(Me.btnOK)
@@ -149,7 +149,7 @@ Partial Class FrmSettings
    Friend WithEvents btnOK As Button
    Friend WithEvents Label1 As Label
    Friend WithEvents ChkTopMost As CheckBox
-   Friend WithEvents LblInterval As Label
+   Friend WithEvents LblPollingInterval As Label
    Friend WithEvents LblIntervalSeconds As Label
    Friend WithEvents NudInverval As NumericUpDown
    Friend WithEvents IpBox1 As GWIPBox.IPBox
