@@ -1,7 +1,23 @@
 # SMA-Monitor
-SMA SB3600TL-21 Monitoring via ModBus (TCP/IP)
-
 This small VB.NET programm is for live monitoring your SMA-SB3600TL-21 inverter on the desktop of a Windows PC.
+
+Program:
+VB.NET
+Winforms
+.Net framwork 4.7.2
+.Net JSON
+
+Devices:
+SMA SB3600TL-21 inverter
+Iungo Energy manager
+
+Protocols:
+TCP/IP
+
+API:
+ModBus via TCP/IP
+Iungo 
+JSON
 
 The live Inverter information:
 1.  Power in Watt
