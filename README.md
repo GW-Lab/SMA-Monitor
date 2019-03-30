@@ -1,5 +1,5 @@
 # SMA-Monitor
-This small VB.NET programm is for live monitoring your SMA-SB3600TL-21 inverter on the desktop of a Windows PC.
+This small VB.NET program is for live monitoring your SMA-SB3600TL-21 inverter on the desktop of a Windows PC.
 
 Program:
 VB.NET
