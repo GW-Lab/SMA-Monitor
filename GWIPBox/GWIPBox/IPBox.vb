@@ -55,7 +55,7 @@ Public Class IPBox
       Get
          Return $"{TxtIP1.Text}.{TxtIP2.Text}.{TxtIP3.Text}.{TxtIP4.Text}"
       End Get
-      Set(ByVal value As String)
+      Set(value As String)
          If value = "" Then
             TxtIP1.Text = ""
             TxtIP2.Text = ""

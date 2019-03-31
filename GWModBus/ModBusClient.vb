@@ -7,23 +7,35 @@ Public Class ModBusClient : Inherits ModBusBase
    End Sub
 
    Public Shared Function ConvertRegistersToFloat(registers As Byte()) As Single
-      If registers.Length <> 4 Then Throw New ArgumentException("Input Array length invalid - Array langth must be '4'")
-      Return BitConverter.ToSingle({registers(3), registers(2), registers(1), registers(0)}, 0)
+      If registers.Length = 4 Then
+         Return BitConverter.ToSingle({registers(3), registers(2), registers(1), registers(0)}, 0)
+      Else
+         Throw New ArgumentException("Input Array length invalid - Array langth must be '4'")
+      End If
    End Function
 
    Public Shared Function ConvertRegistersToInt(registers As Byte()) As Integer
-      If registers.Length <> 4 Then Throw New ArgumentException("Input Array length invalid - Array langth must be '4'")
-      Return BitConverter.ToInt32({registers(3), registers(2), registers(1), registers(0)}, 0)
+      If registers.Length = 4 Then
+         Return BitConverter.ToInt32({registers(3), registers(2), registers(1), registers(0)}, 0)
+      Else
+         Throw New ArgumentException("Input Array length invalid - Array langth must be '4'")
+      End If
    End Function
 
    Public Shared Function ConvertRegistersToLong(registers As Byte()) As Long
-      If registers.Length <> 8 Then Throw New ArgumentException("Input Array length invalid - Array langth must be '8'")
-      Return BitConverter.ToInt64({registers(7), registers(6), registers(5), registers(4), registers(3), registers(2), registers(1), registers(0)}, 0)
+      If registers.Length = 8 Then
+         Return BitConverter.ToInt64({registers(7), registers(6), registers(5), registers(4), registers(3), registers(2), registers(1), registers(0)}, 0)
+      Else
+         Throw New ArgumentException("Input Array length invalid - Array langth must be '8'")
+      End If
    End Function
 
    Public Shared Function ConvertRegistersToDouble(registers As Byte()) As Double
-      If registers.Length <> 8 Then Throw New ArgumentException("Input Array length invalid - Array langth must be '8'")
-      Return BitConverter.ToDouble({registers(7), registers(6), registers(5), registers(4), registers(3), registers(2), registers(1), registers(0)}, 0)
+      If registers.Length = 8 Then
+         Return BitConverter.ToDouble({registers(7), registers(6), registers(5), registers(4), registers(3), registers(2), registers(1), registers(0)}, 0)
+      Else
+         Throw New ArgumentException("Input Array length invalid - Array langth must be '8'")
+      End If
    End Function
 
    Public Shared Function ConvertFloatToBytes(value As Single) As Byte()

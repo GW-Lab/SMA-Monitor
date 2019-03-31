@@ -117,7 +117,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Exceptions\ModBusException.vb" />
+    <Compile Include="ModBusException.vb" />
     <Compile Include="ModBusClient.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">

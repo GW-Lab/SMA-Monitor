@@ -3,7 +3,7 @@
 ' Design...:
 ' Date.....: 15/11/2017 Last revised: 19/09/2018
 ' Notice...: Copyright 1999, All Rights Reserved
-' Notes....: VB 15.6.6 .NET Framework 4.7.2
+' Notes....: VB 16.0 RC4 .NET Framework 4.7.2
 ' Files....: None
 ' Programs.:
 ' Reserved.: Type Class (Electricity)
@@ -17,22 +17,14 @@ Public Class Electricity : Inherits Dictionary(Of String, Device)
    Public EnergyT282 As DataLog
 
    ' Public Power As DataLog
-
    Public Sub New(dataLogListValidLogs As List(Of DataLogListValidLogsJSON.Values), iBase As IungoBase)
       Me.EnergyT181 = New DataLog(dataLogListValidLogs.First(Function(log) log.Prop = "T1").Oid, "T1", iBase)
       Me.EnergyT182 = New DataLog(dataLogListValidLogs.First(Function(log) log.Prop = "T2").Oid, "T2", iBase)
       Me.EnergyT281 = New DataLog(dataLogListValidLogs.First(Function(log) log.Prop = "-T1").Oid, "-T1", iBase)
       Me.EnergyT282 = New DataLog(dataLogListValidLogs.First(Function(log) log.Prop = "-T2").Oid, "-T2", iBase)
-
-      'For Each ndx In Me.Dataloglistvalidlogs.GetData().rv.logs
-      '   If ndx.prop = "T1" Then
-      '      Me.Energy = New DataLog(ndx.oid, "usage", Me.iBase)
-      '      Exit For
-      '   End If
-      'Next
-
    End Sub
 End Class
+
 '{"ok":true,"type":"response","time":0.00090629899932537,"rv":{"value":0},"error":false,"systime":1509791241}
 
 'iod = 538d72d9 

@@ -19,8 +19,6 @@ Imports GWModBus.ModBusClient
 Imports GWIungo
 
 Public Class FrmSMAMonitor
-   Private ReadOnly RemoveSignBitmask As Byte = &B0111_1111
-
    Private SB3600TL As ModBusClient
    Private iungo As IungoClient
 
@@ -37,7 +35,7 @@ Public Class FrmSMAMonitor
    Enum DisplayItem
       Power             ' Not Used
       Ampere
-      DaylyYield
+      DailyYield
       Temp
       TotalYield
       Volt
@@ -99,43 +97,37 @@ Public Class FrmSMAMonitor
 
                If Me.DisplayPower Then
                   Dim power = Await Me.SB3600TL.ReadInputRegistersAsync(30775, 2)                                                                              ' 30775 True Power -> Alternative: 308805 reactive power or apperent power 30813
-
-                  power(0) = power(0) And Me.RemoveSignBitmask                                                                                                 ' Remove sign bit
+                  power(0) = CByte(power(0) And &B0111_1111)                                                                                                   ' Remove sign bit
                   LblSunPowerVal.Text = ConvertRegistersToInt(power).ToString()                                                                                ' Power in W(att)
-
                   LblUsedPowerVal.Text = (Me.iungo.Electricity("usage").Energy.Current + ConvertRegistersToInt(power)).ToString
 
-                  Dim totalUsedPower = CInt(LblSunPowerVal.Text) - CDbl(LblUsedPowerVal.Text)
-
+                  Dim totalUsedPower = CInt(LblSunPowerVal.Text) - CSng(LblUsedPowerVal.Text)
                   LblUsedPowerTotalVal.BackColor = If(totalUsedPower >= 0, Color.LightGreen, Color.Red)
                   LblUsedPowerTotalVal.ForeColor = If(totalUsedPower >= 0, Color.Black, Color.White)
                   LblUsedPowerTotalVal.Text = totalUsedPower.ToString
 
-                  LblSunPowerVal.Refresh()
                   Me.DisplayPower = False
                Else
                   Select Case Me.Display
                      Case DisplayItem.Volt
                         Dim voltage = Await Me.SB3600TL.ReadInputRegistersAsync(30783, 2)
-                        '   voltage(0) = voltage(0) And Me.RemoveSignBitmask
                         LblVoltageValue.Text = (ConvertRegistersToInt(voltage) / 100).ToString("#0.0")
                         Me.Display = DisplayItem.Ampere
                      Case DisplayItem.Ampere
                         Dim ampere = Await Me.SB3600TL.ReadInputRegistersAsync(30795, 2)
-                        '   ampere(0) = ampere(0) And Me.RemoveSignBitmask
                         LblAmpereValue.Text = (ConvertRegistersToInt(ampere) / 1000).ToString("#0.0")
                         Me.Display = DisplayItem.Temp
                      Case DisplayItem.Temp
                         Dim temp = Await Me.SB3600TL.ReadInputRegistersAsync(34113, 2)
                         ' Alternative: 30963
-                        temp(0) = temp(0) And Me.RemoveSignBitmask                                                                                             ' Remove sign bit
+                        temp(0) = CByte(temp(0) And &B0111_1111)                                                                                               ' Remove sign bit
                         LblTempCelsiusValue.Text = (ConvertRegistersToInt(temp) / 10).ToString("#0.0")
-                        Me.Display = DisplayItem.DaylyYield
-                     Case DisplayItem.DaylyYield
+                        Me.Display = DisplayItem.DailyYield
+                     Case DisplayItem.DailyYield
                         LblDayYieldValue.Text = (ConvertRegistersToLong(Await Me.SB3600TL.ReadInputRegistersAsync(30517, 4)) / 1000).ToString("#0.00")         ' kWh 
                         Me.Display = DisplayItem.TotalYield
                      Case DisplayItem.TotalYield
-                        LblTotalYieldValue.Text = (ConvertRegistersToLong(Await Me.SB3600TL.ReadInputRegistersAsync(30513, 4)) / 1000000).ToString("##0.00")  ' MWh
+                        LblTotalYieldValue.Text = (ConvertRegistersToLong(Await Me.SB3600TL.ReadInputRegistersAsync(30513, 4)) / 1000000).ToString("##0.00")   ' MWh
                         Me.Display = DisplayItem.Volt
                   End Select
 

@@ -3,7 +3,7 @@
 ' Design...:
 ' Date.....: 15/11/2017 Last revised: 19/09/2018
 ' Notice...: Copyright 1999, All Rights Reserved
-' Notes....: VB 15.6.6 .NET Framework 4.7.2
+' Notes....: VB 16.0 RC4 .NET Framework 4.7.2
 ' Files....: None
 ' Programs.:
 ' Reserved.: Type Class (IungoBase)
@@ -46,8 +46,6 @@ Public Class IungoBase : Inherits WebRequest
 
 #Region "Get First/Last dates"
    Public Function DataLogGetFirst(oid As String, prop As String) As List(Of List(Of String))                                                                ' {"ok":true,"type":"response","time":0.076535414002137,"rv":{"data":[[1507054386]]},"error":false,"systime":1509739280}
-      'Work a rond via -> datalog_get_day_start_values
-
       Return JsonConvert.DeserializeObject(Of DataLogGetJSON)(ApiRequest("{""method"":""datalog_get_day_start_values"",""arguments"":{""prop"":""" + prop +
                                                                          """,""oid"":""" + oid +
                                                                          """,""t1"":""" + "0" +
@@ -55,19 +53,11 @@ Public Class IungoBase : Inherits WebRequest
    End Function
 
    Public Function DataLogGetLast(oid As String, prop As String) As List(Of List(Of String))
-      ' Do not use defect
       Return JsonConvert.DeserializeObject(Of DataLogGetJSON)(ApiRequest("{""method"":""datalog_get_day_start_values"",""arguments"":{""prop"":""" + prop +
                                                                          """,""oid"":""" + oid +
                                                                          """,""t1"":""" + "299999999999" +
                                                                          """,""t2"":""" + "999999999999" + """}}")).Rv.Data
    End Function
-
-   'Public Function DatalogGetFirstOfDay(oid As String, prop As String, timestamp As UInteger) As UInteger
-   '   Return JsonConvert.DeserializeObject(Of DataLogGetJSON)(ApiRequest("{""method"":""datalog_get_first_of_day"",
-   '                                                                      ""arguments"":{""oid"":""" + oid +
-   '                                                                      """,""prop"":""" + prop +
-   '                                                                      """,""timestamp"":""" + timestamp.ToString + """}}")).Rv.Timestamp
-   'End Function
 
    Public Function DatalogGetFirstValueAfter(oid As String, prop As String, timestamp As UInteger) As UInteger
       Return JsonConvert.DeserializeObject(Of DatalogGetFirstValueAfterJSON)(ApiRequest("{""method"":""datalog_get_first_value_after"",
@@ -99,31 +89,10 @@ Public Class IungoBase : Inherits WebRequest
             End Using
          End Using
       Catch ex As Exception
-         '  MessageBox.Show("Iungo: " + ex.Message)
          Return ""
       End Try
    End Function
 End Class
-
-'Public Function Ping_Host(ByVal buffer_size As Integer, ByVal timeout As Integer) As String
-'   Dim ping_Reply = ""
-'   Dim ip = Me.Get_IP_From_Host(Me.strHostname)
-'   Dim buffer = New Byte(buffer_size - 1) {}
-'   If ip IsNot Nothing Then
-'      Using p = New Ping()
-'         Using are = New AutoResetEvent(False)
-'            p.SendAsync(ip, timeout, buffer, New PingOptions With {.Ttl = 64, .DontFragment = True}, are)
-'            p.PingCompleted += Function(o, e)
-'                                  Strping_Reply = e.Reply.Status.ToString()
-'                               End Function
-'         End Using
-'      End Using
-
-'      Return Strping_Reply
-'   Else
-'      Return Nothing
-'   End If
-'End Function
 
 '{"ok":true,
 '"type":"response",

@@ -12,6 +12,7 @@
       NudInverval.Value = My.Settings.Interval
       NudModBusID.Value = My.Settings.ModBusID
       ChkTopMost.Checked = My.Settings.TopMost
+
       Location = Me.frm.Location
    End Sub
 

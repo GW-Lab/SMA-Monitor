@@ -3,7 +3,7 @@
 ' Design...: 
 ' Date.....: 15/11/2017 Last revised: 19/09/2018
 ' Notice...: Copyright 1999, All Rights Reserved
-' Notes....: VB 15.6.6 .NET Framework 4.7.2
+' Notes....: VB 16.0 RC4 .NET Framework 4.7.2
 ' Files....: None
 ' Programs.:
 ' Reserved.: Type Class (IungoClient)
@@ -11,7 +11,6 @@
 Imports System.Net
 
 Public Class IungoClient : Inherits IungoBase
-   '  Private ReadOnly iBase As IungoBase
    Public Gas As Gas
    Public Electricity As Electricity
    Public Solar As Solar
@@ -20,7 +19,6 @@ Public Class IungoClient : Inherits IungoBase
    Public Weather As Weather
 
    Public Sub New(ip As IPAddress)
-      ' Me.iBase = New IungoBase(ip)
       MyBase.New(ip)
       Dim dataloglistvalidlogs = New DataLogListValidLogs(Me).GetData.Rv.Logs
 
@@ -67,7 +65,7 @@ Public Class IungoClient : Inherits IungoBase
    End Function
 #End Region
 
-   Public Shared Function ConvertTimeStampToDate(value As Long) As Date
+   Public Shared Function ConvertUnixTimeStampToDate(value As Long) As Date
       Dim origin = New Date(1970, 1, 1, 0, 0, 0, 0)
       Return origin.AddSeconds(value)
    End Function

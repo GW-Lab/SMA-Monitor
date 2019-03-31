@@ -4,7 +4,7 @@
 ' Design...:
 ' Date.....: 15/11/2017 Last revised: 19/09/2018
 ' Notice...: Copyright 1999, All Rights Reserved
-' Notes....: VB 15.6.6 .NET Framework 4.7.2
+' Notes....: VB 16.0 RC4 .NET Framework 4.7.2
 ' Files....: None
 ' Programs.:
 ' Reserved.: Type Class (DataLog)
@@ -42,15 +42,6 @@ Public Class DataLog
 
    Public Function Values(t1 As Date, t2 As Date, Optional resolution As Integer = 600) As DataLogCSVJSON
       Dim steps = 0
-
-
-      Dim a = Me.iBase.ApiRequest("{""method"":""datalog_get"",""arguments"":{""prop"":""" + Me.prop +
-                                                                                     """,""oid"":""" + Me.oid +
-                                                                                     """,""steps"":""" + steps.ToString +
-                                                                                     """,""resolution"":""" + resolution.ToString +
-                                                                                     """,""t1"":""" + IungoClient.ConvertDateToUnixTimestamp(t1).ToString +
-                                                                                     """,""t2"":""" + IungoClient.ConvertDateToUnixTimestamp(t2).ToString + """}}")
-
       Dim obj = JsonConvert.DeserializeObject(Of DataLogCSVJSON)(Me.iBase.ApiRequest("{""method"":""datalog_get"",""arguments"":{""prop"":""" + Me.prop +
                                                                                      """,""oid"":""" + Me.oid +
                                                                                      """,""steps"":""" + steps.ToString +

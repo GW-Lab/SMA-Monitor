@@ -3,7 +3,7 @@
 ' Design...:
 ' Date.....: 15/11/2017 Last revised: 19/09/2018
 ' Notice...: Copyright 1999, All Rights Reserved
-' Notes....: VB 15.6.6 .NET Framework 4.7.2
+' Notes....: VB 16.0 RC4 .NET Framework 4.7.2
 ' Files....: None
 ' Programs.:
 ' Reserved.: Type Class (DataLogListValidLogsJSON)
@@ -30,6 +30,7 @@ Public Class DataLogListValidLogsJSON
       Return JsonConvert.SerializeObject(Me)
    End Function
 End Class
+
 '{"ok":true,"type":"response","time":0.10831994609907,'"rv":{"logs":
 '[{"prop":"import","oid":"ae587066"},
 '{"prop":"solar","oid":"ae587066"},
