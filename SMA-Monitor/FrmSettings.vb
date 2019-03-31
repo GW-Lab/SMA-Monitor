@@ -1,6 +1,5 @@
 ﻿Public Class FrmSettings
    Private ReadOnly frm As FrmSMAMonitor
-   '  Public Event Interval_Changed(interval As Integer)
 
    Public Sub New(frm As FrmSMAMonitor)
       InitializeComponent() ' This call is required by the designer.
@@ -22,6 +21,7 @@
       My.Settings.ModBusID = CByte(NudInverval.Value)
       My.Settings.TopMost = ChkTopMost.Checked
 
+      Me.frm.TmrMain.Interval = My.Settings.Interval
       Close()
    End Sub
 End Class

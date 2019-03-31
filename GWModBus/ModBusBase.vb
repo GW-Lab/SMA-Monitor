@@ -13,9 +13,9 @@ Public Class ModBusBase : Inherits TcpClient
    Private ReadOnly Property Port As Integer = 502                                                    ' Gets the Port were the Modbus-TCP Server is reachable (Standard is 502).
    Private ReadOnly Property UnitIdentifier As Byte = &H1                                             ' Gets the Unit identifier in case of serial connection (Default = 0)
 
-   Public Event ConnectedChanged(sender As Object)
-   'Public Event ReceiveDataChanged(sender As Object)
-   'Public Event SendDataChanged(sender As Object)
+   ' Public Event ConnectedChanged(sender As Object)
+   ' Public Event ReceiveDataChanged(sender As Object)
+   ' Public Event SendDataChanged(sender As Object)
 
    Public Sub New(unitIdentifier As Byte, ipAddress As IPAddress, Optional port As Integer = 502) ' Constructor which determines the Master ip-address and the Master Port.
       Me.UnitIdentifier = unitIdentifier
@@ -24,13 +24,11 @@ Public Class ModBusBase : Inherits TcpClient
    End Sub
 
    Public Overloads Sub Connect()                                                                     ' Establish a TCP connection to a ModBus-device 
-      Dim result = BeginConnect(IPAddress, Port, Nothing, Nothing)
+      Connect(IPAddress, Port)
 
-      If result.AsyncWaitHandle.WaitOne(ConnectionTimeout) Then
+      If Connected Then
          Me.networkStream = GetStream()
          Me.networkStream.ReadTimeout = ConnectionTimeout
-
-         RaiseEvent ConnectedChanged(Me)
       Else
          Close()
          Throw New Exceptions.ConnectionException("connection timed out")
@@ -130,8 +128,7 @@ Public Class ModBusBase : Inherits TcpClient
    Public Sub Disconnect()                                                                            ' Close connection to ModBus-device.
       If Me.networkStream IsNot Nothing Then Me.networkStream.Close()
       If Me IsNot Nothing Then Close()
-
-      RaiseEvent ConnectedChanged(Me)
+      '  RaiseEvent ConnectedChanged(Me)
    End Sub
 
    Protected Overrides Sub Finalize()                                                                 ' Destructor - Close connection to ModBus-device.

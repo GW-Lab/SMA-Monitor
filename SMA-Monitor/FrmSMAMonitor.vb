@@ -63,11 +63,13 @@ Public Class FrmSMAMonitor
       Me.Display = DisplayItem.Volt
 
       Try
+         Me.SB3600TL = New ModBusClient(My.Settings.ModBusID, Net.IPAddress.Parse(My.Settings.IPAddress), 502)
+         Me.SB3600TL.Connect()
+
          Me.iungo = New IungoClient(New Net.IPAddress({192, 168, 2, 122}))
          LblStatusValue.BackColor = Color.Green
       Catch ex As Exception
          LblStatusValue.BackColor = Color.Red
-         Me.SB3600TL.Dispose()
       End Try
 
       ContextMenuStrip = CmsMain
@@ -83,9 +85,6 @@ Public Class FrmSMAMonitor
 
    Private Async Sub TmrMain_TickAsync(sender As Object, e As EventArgs) Handles TmrMain.Tick
       Try
-         Me.SB3600TL = New ModBusClient(My.Settings.ModBusID, Net.IPAddress.Parse(My.Settings.IPAddress), 502)
-         Me.SB3600TL.Connect()
-
          Select Case ConvertRegistersToInt(Await Me.SB3600TL.ReadInputRegistersAsync(30201, 2))
             Case SB3600TLStatus.Ok
                LblStatusValue.BackColor = Color.Green
@@ -143,7 +142,6 @@ Public Class FrmSMAMonitor
          End Select
          Refresh()
 
-         Me.SB3600TL.Close()
       Catch ex As Exception
          LblStatusValue.BackColor = Color.Red
          LblSunPowerVal.Text = "0"
