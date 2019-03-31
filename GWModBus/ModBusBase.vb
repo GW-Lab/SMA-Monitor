@@ -13,10 +13,6 @@ Public Class ModBusBase : Inherits TcpClient
    Private ReadOnly Property Port As Integer = 502                                                    ' Gets the Port were the Modbus-TCP Server is reachable (Standard is 502).
    Private ReadOnly Property UnitIdentifier As Byte = &H1                                             ' Gets the Unit identifier in case of serial connection (Default = 0)
 
-   ' Public Event ConnectedChanged(sender As Object)
-   ' Public Event ReceiveDataChanged(sender As Object)
-   ' Public Event SendDataChanged(sender As Object)
-
    Public Sub New(unitIdentifier As Byte, ipAddress As IPAddress, Optional port As Integer = 502) ' Constructor which determines the Master ip-address and the Master Port.
       Me.UnitIdentifier = unitIdentifier
       Me.IPAddress = ipAddress
@@ -35,7 +31,7 @@ Public Class ModBusBase : Inherits TcpClient
       End If
    End Sub
 
-   Public Async Function ReadHoldingRegistersAsync(startingAddress As UInt16, quantity As UInt16) As Task(Of Byte())   ' Read Holding Registers from Master device (FC3).
+   Public Async Function ReadHoldingRegistersAsync(startingAddress As UShort, quantity As UShort) As Task(Of Byte())   ' Read Holding Registers from Master device (FC3).
       If Connected Then
          If startingAddress > Me.MaxRegisterAddresses OrElse quantity > Me.MaxRegistersToReadOrWrite Then Throw New ArgumentException($"Starting address must be 0 - {Me.MaxRegisterAddresses}; quantity must be 0 - {Me.MaxRegistersToReadOrWrite}")
 
@@ -55,11 +51,9 @@ Public Class ModBusBase : Inherits TcpClient
 
          If Client.Connected Then
             Await Me.networkStream.WriteAsync(modBusPacket.ToArray, 0, modBusPacket.Count - 2)
-            '   RaiseEvent SendDataChanged(Me)
 
             receiveBuffer = New [Byte](quantity * 2 + 8) {}
-            Dim bytesReceived = Me.networkStream.ReadAsync(receiveBuffer, 0, receiveBuffer.Length)
-            '   RaiseEvent ReceiveDataChanged(Me)
+            Dim bytesReceived = Await Me.networkStream.ReadAsync(receiveBuffer, 0, receiveBuffer.Length)
          End If
 
          If receiveBuffer(7) = &H84 Then
@@ -80,7 +74,7 @@ Public Class ModBusBase : Inherits TcpClient
       End If
    End Function
 
-   Public Async Function ReadInputRegistersAsync(startingAddress As UInt16, quantity As UInt16) As Task(Of Byte())
+   Public Async Function ReadInputRegistersAsync(startingAddress As UShort, quantity As UShort) As Task(Of Byte())
       If Connected Then
          If startingAddress > Me.MaxRegisterAddresses OrElse quantity > Me.MaxRegistersToReadOrWrite Then Throw New ArgumentException($"Starting address must be 0 - {Me.MaxRegisterAddresses}; quantity must be 0 - {Me.MaxRegistersToReadOrWrite}")
 
@@ -100,11 +94,9 @@ Public Class ModBusBase : Inherits TcpClient
 
          If Client.Connected Then
             Await Me.networkStream.WriteAsync(modBusPacket.ToArray, 0, modBusPacket.Count - 2)
-            '  RaiseEvent SendDataChanged(Me)
 
             receiveBuffer = New Byte(quantity * 2 + 8) {}
             Dim bytesReceived = Await Me.networkStream.ReadAsync(receiveBuffer, 0, receiveBuffer.Length)
-            '  RaiseEvent ReceiveDataChanged(Me)
          End If
 
          If receiveBuffer(7) = &H84 Then
