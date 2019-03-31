@@ -120,7 +120,6 @@ Public Class ModBusBase : Inherits TcpClient
    Public Sub Disconnect()                                                                            ' Close connection to ModBus-device.
       If Me.networkStream IsNot Nothing Then Me.networkStream.Close()
       If Me IsNot Nothing Then Close()
-      '  RaiseEvent ConnectedChanged(Me)
    End Sub
 
    Protected Overrides Sub Finalize()                                                                 ' Destructor - Close connection to ModBus-device.
