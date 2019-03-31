@@ -12,7 +12,7 @@ Imports Newtonsoft.Json
 Public Class PowerSwitchOnOffJSON
    Public Ok As Boolean
    Public [Type] As String
-   Public Time As UInt32
+   Public Time As UInteger
    Public [Error] As String
    Public Rv As RVValue
    Public Systime As UInteger

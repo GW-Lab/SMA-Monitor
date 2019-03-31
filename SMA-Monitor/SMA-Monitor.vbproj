@@ -6,9 +6,9 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{F7F3C392-2ABE-45FB-AB5E-1048415BF355}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>TestModBus.My.MyApplication</StartupObject>
-    <RootNamespace>TestModBus</RootNamespace>
-    <AssemblyName>TestModBus</AssemblyName>
+    <StartupObject>SMAMonitor.My.MyApplication</StartupObject>
+    <RootNamespace>SMAMonitor</RootNamespace>
+    <AssemblyName>SMAMonitor</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>

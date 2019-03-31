@@ -12,7 +12,7 @@ Imports Newtonsoft.Json
 Public Class P1JSON
    Public Ok As Boolean
    Public [Type] As String
-   Public Time As UInt32
+   Public Time As UInteger
    Public Rv As RVValues
    Public [Error] As String
    Public Systime As UInteger

@@ -11,7 +11,7 @@ Imports Newtonsoft.Json
 Public Class DataLogCSVJSON
    Public Ok As Boolean
    Public [Type] As String
-   Public Time As System.UInt32
+   Public Time As UInteger
    Public [Rrror] As String
    Public Systime As UInteger
    Public rv As RVValues

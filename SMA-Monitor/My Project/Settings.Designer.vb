@@ -136,9 +136,9 @@ Namespace My
     Friend Module MySettingsProperty
         
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
-        Friend ReadOnly Property Settings() As Global.TestModBus.My.MySettings
+        Friend ReadOnly Property Settings() As Global.SMAMonitor.My.MySettings
             Get
-                Return Global.TestModBus.My.MySettings.Default
+                Return Global.SMAMonitor.My.MySettings.Default
             End Get
         End Property
     End Module

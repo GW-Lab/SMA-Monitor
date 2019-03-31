@@ -12,14 +12,14 @@ Imports Newtonsoft.Json
 Public Class DatalogGetFirstValueAfterJSON
    Public Ok As Boolean
    Public [Type] As String
-   Public Time As UInt32
+   Public Time As UInteger
    Public Rv As RVValues
    Public [Error] As String
    Public Systime As UInteger
 
    Public Class RVValues
-      Public Timestamp As UInt32
-      Public Value As UInt32
+      Public Timestamp As UInteger
+      Public Value As UInteger
    End Class
 
    Public Function ToJsonString() As String

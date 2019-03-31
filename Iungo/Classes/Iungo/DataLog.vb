@@ -40,7 +40,7 @@ Public Class DataLog
       End Get
    End Property
 
-   Public Function Values(t1 As DateTime, t2 As DateTime, Optional resolution As Integer = 600) As DataLogCSVJSON
+   Public Function Values(t1 As Date, t2 As Date, Optional resolution As Integer = 600) As DataLogCSVJSON
       Dim steps = 0
 
 
@@ -81,7 +81,7 @@ Public Class DataLog
       Return obj
    End Function
 
-   Public Function Values(t1TimeStamp As UInt32, t2TimeStamp As UInt32, Optional resolution As Integer = 600) As DataLogCSVJSON
+   Public Function Values(t1TimeStamp As UInteger, t2TimeStamp As UInteger, Optional resolution As Integer = 600) As DataLogCSVJSON
       Dim steps = 0
       Dim obj = JsonConvert.DeserializeObject(Of DataLogCSVJSON)(Me.iBase.ApiRequest("{""method"":""datalog_get"",""arguments"":{""prop"":""" + Me.prop +
                                                                                      """,""oid"":""" + Me.oid +

@@ -11,12 +11,12 @@ Public Class ModBusClient : Inherits ModBusBase
       Return BitConverter.ToSingle({registers(3), registers(2), registers(1), registers(0)}, 0)
    End Function
 
-   Public Shared Function ConvertRegistersToInt(registers As Byte()) As Int32
+   Public Shared Function ConvertRegistersToInt(registers As Byte()) As Integer
       If registers.Length <> 4 Then Throw New ArgumentException("Input Array length invalid - Array langth must be '4'")
       Return BitConverter.ToInt32({registers(3), registers(2), registers(1), registers(0)}, 0)
    End Function
 
-   Public Shared Function ConvertRegistersToLong(registers As Byte()) As Int64
+   Public Shared Function ConvertRegistersToLong(registers As Byte()) As Long
       If registers.Length <> 8 Then Throw New ArgumentException("Input Array length invalid - Array langth must be '8'")
       Return BitConverter.ToInt64({registers(7), registers(6), registers(5), registers(4), registers(3), registers(2), registers(1), registers(0)}, 0)
    End Function
@@ -30,11 +30,11 @@ Public Class ModBusClient : Inherits ModBusBase
       Return BitConverter.GetBytes(value)
    End Function
 
-   Public Shared Function ConvertIntToBytes(value As Int32) As Byte()
+   Public Shared Function ConvertIntToBytes(value As Integer) As Byte()
       Return BitConverter.GetBytes(value)
    End Function
 
-   Public Shared Function ConvertLongToBytes(value As Int64) As Byte()
+   Public Shared Function ConvertLongToBytes(value As Long) As Byte()
       Return BitConverter.GetBytes(value)
    End Function
 

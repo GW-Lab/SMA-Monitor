@@ -12,7 +12,7 @@ Imports Newtonsoft.Json
 Public Class SolarJSON
    Public Ok As Boolean
    Public [Type] As String
-   Public Time As UInt32
+   Public Time As UInteger
    Public Rv As RVValues
    Public [Error] As Boolean
    Public Systime As UInteger

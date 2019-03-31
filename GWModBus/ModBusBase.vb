@@ -3,28 +3,28 @@ Imports System.Net.Sockets
 
 Public Class ModBusBase : Inherits TcpClient
    Private ReadOnly MaxRegistersToReadOrWrite As Byte = 125                                           ' ModBus Max = 125
-   Private ReadOnly MaxRegisterAddresses As UInt16 = 65535
+   Private ReadOnly MaxRegisterAddresses As UShort = 65535
 
    Private networkStream As NetworkStream
-   Private transactionIdentifier As UInt16 = 0                                                        ' Generate/holds a unique indentifier for Each ModBus Command   
+   Private transactionIdentifier As UShort = 0                                                        ' Generate/holds a unique indentifier for Each ModBus Command   
 
-   Private ReadOnly Property ConnectionTimeout As Integer = 1000                                      ' Gets the connection Timeout in case of ModbusTCP connection
-   Private ReadOnly Property IPAddress As IPAddress                                                   ' Gets the IP-Address of the Server.
-   Private ReadOnly Property Port As Integer = 502                                                    ' Gets the Port were the Modbus-TCP Server is reachable (Standard is 502).
-   Private ReadOnly Property UnitIdentifier As Byte = &H1                                             ' Gets the Unit identifier in case of serial connection (Default = 0)
+   Private ReadOnly ConnectionTimeout As Integer = 1000                                               ' Gets the connection Timeout in case of ModbusTCP connection
+   Private ReadOnly IPAddress As IPAddress                                                            ' Gets the IP-Address of the Server.
+   Private ReadOnly Port As Integer = 502                                                             ' Gets the Port were the Modbus-TCP Server is reachable (Standard is 502).
+   Private ReadOnly UnitIdentifier As Byte = &H1                                                      ' Gets the Unit identifier in case of serial connection (Default = 0)
 
-   Public Sub New(unitIdentifier As Byte, ipAddress As IPAddress, Optional port As Integer = 502) ' Constructor which determines the Master ip-address and the Master Port.
+   Public Sub New(unitIdentifier As Byte, ipAddress As IPAddress, Optional port As Integer = 502)     ' Constructor which determines the Master ip-address and the Master Port.
       Me.UnitIdentifier = unitIdentifier
       Me.IPAddress = ipAddress
       Me.Port = port
    End Sub
 
    Public Overloads Sub Connect()                                                                     ' Establish a TCP connection to a ModBus-device 
-      Connect(IPAddress, Port)
+      Connect(Me.IPAddress, Me.Port)
 
       If Connected Then
          Me.networkStream = GetStream()
-         Me.networkStream.ReadTimeout = ConnectionTimeout
+         Me.networkStream.ReadTimeout = Me.ConnectionTimeout
       Else
          Close()
          Throw New Exceptions.ConnectionException("connection timed out")
@@ -41,7 +41,7 @@ Public Class ModBusBase : Inherits TcpClient
          modBusPacket.AddRange(BitConverter.GetBytes(Me.transactionIdentifier).Reverse)               ' TransAction
          modBusPacket.AddRange(BitConverter.GetBytes(&H0US).Reverse)                                  ' Protocol   
          modBusPacket.AddRange(BitConverter.GetBytes(&H6US).Reverse)                                  ' Length
-         modBusPacket.AddRange({UnitIdentifier, &H3})                                                 ' UnitIndentifier/ModBus Fuction Code 3
+         modBusPacket.AddRange({Me.UnitIdentifier, &H3})                                              ' UnitIndentifier/ModBus Fuction Code 3
          modBusPacket.AddRange(BitConverter.GetBytes(startingAddress).Reverse)                        ' StartAddress
          modBusPacket.AddRange(BitConverter.GetBytes(quantity).Reverse)                               ' Quantity   
          modBusPacket.AddRange({0, 0})                                                                ' CRC Bytes  
@@ -52,7 +52,7 @@ Public Class ModBusBase : Inherits TcpClient
          If Client.Connected Then
             Await Me.networkStream.WriteAsync(modBusPacket.ToArray, 0, modBusPacket.Count - 2)
 
-            receiveBuffer = New [Byte](quantity * 2 + 8) {}
+            receiveBuffer = New Byte(quantity * 2 + 8) {}
             Dim bytesReceived = Await Me.networkStream.ReadAsync(receiveBuffer, 0, receiveBuffer.Length)
          End If
 
@@ -84,7 +84,7 @@ Public Class ModBusBase : Inherits TcpClient
          modBusPacket.AddRange(BitConverter.GetBytes(Me.transactionIdentifier).Reverse)               ' TransAction
          modBusPacket.AddRange(BitConverter.GetBytes(&H0US).Reverse)                                  ' Protocol   
          modBusPacket.AddRange(BitConverter.GetBytes(&H6US).Reverse)                                  ' Length
-         modBusPacket.AddRange({UnitIdentifier, &H4})                                                 ' UnitIndentifier/ModBus Fuction Code 4
+         modBusPacket.AddRange({Me.UnitIdentifier, &H4})                                              ' UnitIndentifier/ModBus Fuction Code 4
          modBusPacket.AddRange(BitConverter.GetBytes(startingAddress).Reverse)                        ' StartAddress
          modBusPacket.AddRange(BitConverter.GetBytes(quantity).Reverse)                               ' Quantity   
          modBusPacket.AddRange({0, 0})                                                                ' CRC Bytes  

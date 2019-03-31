@@ -78,9 +78,17 @@ Public Class FrmSMAMonitor
    Private Sub FrmSB3600TLMonitor_Closing() Handles Me.Closing
       My.Settings.LocationX = Location.X
       My.Settings.LocationY = Location.Y
-      TmrMain.Interval = My.Settings.Interval
 
       Me.SB3600TL.Disconnect()
+   End Sub
+
+   Private Sub MnuSettings_Click(sender As Object, e As EventArgs) Handles MnuSettings.Click
+      Dim frmSettings = New FrmSettings(Me)
+      frmSettings.Show()
+   End Sub
+
+   Private Sub MnuExit_Click(sender As Object, e As EventArgs) Handles MnuExit.Click
+      Close()
    End Sub
 
    Private Async Sub TmrMain_TickAsync(sender As Object, e As EventArgs) Handles TmrMain.Tick
@@ -93,7 +101,7 @@ Public Class FrmSMAMonitor
                   Dim power = Await Me.SB3600TL.ReadInputRegistersAsync(30775, 2)                                                                              ' 30775 True Power -> Alternative: 308805 reactive power or apperent power 30813
 
                   power(0) = power(0) And Me.RemoveSignBitmask                                                                                                 ' Remove sign bit
-                  LblSunPowerVal.Text = ConvertRegistersToInt(power).ToString()                                                                                 ' Power in W(att)
+                  LblSunPowerVal.Text = ConvertRegistersToInt(power).ToString()                                                                                ' Power in W(att)
 
                   LblUsedPowerVal.Text = (Me.iungo.Electricity("usage").Energy.Current + ConvertRegistersToInt(power)).ToString
 
@@ -140,6 +148,7 @@ Public Class FrmSMAMonitor
             Case SB3600TLStatus.Warning
                LblStatusValue.BackColor = Color.Yellow
          End Select
+
          Refresh()
 
       Catch ex As Exception
@@ -149,14 +158,5 @@ Public Class FrmSMAMonitor
          LblDayYieldValue.Text = "0.0"
          LblTotalYieldValue.Text = "0.0"
       End Try
-   End Sub
-
-   Private Sub MnuSettings_Click(sender As Object, e As EventArgs) Handles MnuSettings.Click
-      Dim frmSettings = New FrmSettings(Me)
-      frmSettings.Show()
-   End Sub
-
-   Private Sub MnuExit_Click(sender As Object, e As EventArgs) Handles MnuExit.Click
-      Close()
    End Sub
 End Class
