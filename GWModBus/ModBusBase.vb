@@ -2,11 +2,11 @@
 Imports System.Net.Sockets
 
 Public Class ModBusBase : Inherits TcpClient
-   Private ReadOnly MaxRegistersToReadOrWrite As Byte = 125                                           ' ModBus Max = 125
-   Private ReadOnly MaxRegisterAddresses As UShort = 65535
+   Private ReadOnly MaxRegistersToReadOrWrite As Byte = 125                                           ' ModBus registers   125 maximal to read/write in a command
+   Private ReadOnly MaxRegisterAddresses As UShort = 65535                                            ' ModBus addresses 65535 maximal
 
    Private networkStream As NetworkStream
-   Private transactionIdentifier As UShort = 0                                                        ' Generate/holds a unique indentifier for Each ModBus Command   
+   Private transactionID As UShort = 0                                                                ' Unique (generated) indentifier for Each command send to the ModBus   
 
    Private ReadOnly ConnectionTimeout As Integer = 1000                                               ' Gets the connection Timeout in case of ModbusTCP connection
    Private ReadOnly IPAddress As IPAddress                                                            ' Gets the IP-Address of the Server.
@@ -35,22 +35,21 @@ Public Class ModBusBase : Inherits TcpClient
       If Connected Then
          If startingAddress > Me.MaxRegisterAddresses OrElse quantity > Me.MaxRegistersToReadOrWrite Then Throw New ArgumentException($"Starting address must be 0 - {Me.MaxRegisterAddresses}; quantity must be 0 - {Me.MaxRegistersToReadOrWrite}")
 
-         Me.transactionIdentifier += 1US
+         Me.transactionID += 1US
 
-         Dim modBusPacket = New ModBusPacket
-         modBusPacket.AddRange(BitConverter.GetBytes(Me.transactionIdentifier).Reverse)               ' TransAction
-         modBusPacket.AddRange(BitConverter.GetBytes(&H0US).Reverse)                                  ' Protocol   
-         modBusPacket.AddRange(BitConverter.GetBytes(&H6US).Reverse)                                  ' Length
-         modBusPacket.AddRange({Me.UnitIdentifier, &H3})                                              ' UnitIndentifier/ModBus Fuction Code 3
-         modBusPacket.AddRange(BitConverter.GetBytes(startingAddress).Reverse)                        ' StartAddress
-         modBusPacket.AddRange(BitConverter.GetBytes(quantity).Reverse)                               ' Quantity   
-         modBusPacket.AddRange({0, 0})                                                                ' CRC Bytes  
-         modBusPacket.ComputeCRC()
+         Dim packet = New ModBusPacket
+         packet.AddRange(BitConverter.GetBytes(Me.transactionID).Reverse)                             ' TransAction ID
+         packet.AddRange(BitConverter.GetBytes(&H0US).Reverse)                                        ' Protocol   
+         packet.AddRange(BitConverter.GetBytes(&H6US).Reverse)                                        ' Length
+         packet.AddRange({Me.UnitIdentifier, &H3})                                                    ' UnitIndentifier/ModBus Fuction Code 3
+         packet.AddRange(BitConverter.GetBytes(startingAddress).Reverse)                              ' StartAddress
+         packet.AddRange(BitConverter.GetBytes(quantity).Reverse)                                     ' Quantity   
+         packet.ComputeCRC()                                                                          ' Read ALL data added to the packet until now Compute CRC16 and append the CRC16 to the packet   
 
-         Dim receiveBuffer As Byte() = {}                                                             ' Create Respons buffer
+         Dim receiveBuffer As Byte() = {}                                                             ' Create a Respons buffer
 
          If Client.Connected Then
-            Await Me.networkStream.WriteAsync(modBusPacket.ToArray, 0, modBusPacket.Count - 2)
+            Await Me.networkStream.WriteAsync(packet.ToArray, 0, packet.Count - 2)
 
             receiveBuffer = New Byte(quantity * 2 + 8) {}
             Dim bytesReceived = Await Me.networkStream.ReadAsync(receiveBuffer, 0, receiveBuffer.Length)
@@ -78,22 +77,21 @@ Public Class ModBusBase : Inherits TcpClient
       If Connected Then
          If startingAddress > Me.MaxRegisterAddresses OrElse quantity > Me.MaxRegistersToReadOrWrite Then Throw New ArgumentException($"Starting address must be 0 - {Me.MaxRegisterAddresses}; quantity must be 0 - {Me.MaxRegistersToReadOrWrite}")
 
-         Me.transactionIdentifier += 1US
+         Me.transactionID += 1US
 
-         Dim modBusPacket = New ModBusPacket
-         modBusPacket.AddRange(BitConverter.GetBytes(Me.transactionIdentifier).Reverse)               ' TransAction
-         modBusPacket.AddRange(BitConverter.GetBytes(&H0US).Reverse)                                  ' Protocol   
-         modBusPacket.AddRange(BitConverter.GetBytes(&H6US).Reverse)                                  ' Length
-         modBusPacket.AddRange({Me.UnitIdentifier, &H4})                                              ' UnitIndentifier/ModBus Fuction Code 4
-         modBusPacket.AddRange(BitConverter.GetBytes(startingAddress).Reverse)                        ' StartAddress
-         modBusPacket.AddRange(BitConverter.GetBytes(quantity).Reverse)                               ' Quantity   
-         modBusPacket.AddRange({0, 0})                                                                ' CRC Bytes  
-         modBusPacket.ComputeCRC()
+         Dim packet = New ModBusPacket
+         packet.AddRange(BitConverter.GetBytes(Me.transactionID).Reverse)                             ' TransAction ID
+         packet.AddRange(BitConverter.GetBytes(&H0US).Reverse)                                        ' Protocol   
+         packet.AddRange(BitConverter.GetBytes(&H6US).Reverse)                                        ' Length
+         packet.AddRange({Me.UnitIdentifier, &H4})                                                    ' UnitIndentifier/ModBus Fuction Code 4
+         packet.AddRange(BitConverter.GetBytes(startingAddress).Reverse)                              ' StartAddress
+         packet.AddRange(BitConverter.GetBytes(quantity).Reverse)                                     ' Quantity   
+         packet.ComputeCRC()                                                                          ' Use ALL packet data (except CRC bytes) and Compute the CRC16 and append the CRC16 to the packet  
 
-         Dim receiveBuffer As Byte() = {}                                                             ' Create Respons buffer
+         Dim receiveBuffer As Byte() = {}                                                             ' Create Respons a buffer
 
          If Client.Connected Then
-            Await Me.networkStream.WriteAsync(modBusPacket.ToArray, 0, modBusPacket.Count - 2)
+            Await Me.networkStream.WriteAsync(packet.ToArray, 0, packet.Count - 2)
 
             receiveBuffer = New Byte(quantity * 2 + 8) {}
             Dim bytesReceived = Await Me.networkStream.ReadAsync(receiveBuffer, 0, receiveBuffer.Length)
@@ -148,7 +146,7 @@ Public Class ModBusBase : Inherits TcpClient
    ' 7. The final content of the CRC register Is the CRC value. 
    ' 8. When the CRC Is placed into the message, its upper And lower bytes must be swapped.
 
-   Public Shared Function CRC16(data As Byte()) As UShort
+   Public Shared Function CRC16(data As Byte()) As Byte()
       Dim crc As UShort = &HFFFF
 
       For ndx = 0 To data.Length - 1
@@ -163,6 +161,6 @@ Public Class ModBusBase : Inherits TcpClient
          Next
       Next
 
-      Return crc
+      Return BitConverter.GetBytes(crc)
    End Function
 End Class

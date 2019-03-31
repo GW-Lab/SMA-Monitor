@@ -1,9 +1,6 @@
 ﻿Public Class ModBusPacket : Inherits List(Of Byte)
    Public Sub ComputeCRC()
-      Dim crc = BitConverter.GetBytes(ModBusBase.CRC16(Me.ToArray))
-
-      Item(Count - 2) = crc(0)
-      Item(Count - 1) = crc(1)
+      AddRange(ModBusBase.CRC16(Me.ToArray)) ' Add the CRC to the Packet
    End Sub
 
    'Public Shared Function DetectValidModbusFrame(readBuffer As Byte(), length As Integer) As Boolean
