@@ -1,11 +1,13 @@
 ﻿Public Class FrmSettings
    Private ReadOnly frm As FrmSMAMonitor
 
+#Region "Constructor"
    Public Sub New(frm As FrmSMAMonitor)
-      InitializeComponent() ' This call is required by the designer.
+      InitializeComponent()   ' This call is required by the designer.
 
-      Me.frm = frm ' Add any initialization after the InitializeComponent() call.
+      Me.frm = frm            ' Add any initialization after the InitializeComponent() call.
    End Sub
+#End Region
 
    Private Sub FrmSettings_Load(sender As Object, e As EventArgs) Handles Me.Load
       IpBox1.Text = My.Settings.IPAddress
@@ -23,6 +25,7 @@
       My.Settings.TopMost = ChkTopMost.Checked
 
       Me.frm.TmrMain.Interval = My.Settings.Interval
+
       Close()
    End Sub
 End Class

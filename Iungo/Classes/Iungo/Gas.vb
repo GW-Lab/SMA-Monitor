@@ -11,9 +11,9 @@
 Imports Newtonsoft.Json
 
 Public Class Gas
-   Private ReadOnly GWIungo As IungoBase
-   Public ReadOnly oid As String
+   ReadOnly GWIungo As IungoBase
 
+   Public ReadOnly oid As String
    Public Power As DataLog
    Public Energy As DataLog
 

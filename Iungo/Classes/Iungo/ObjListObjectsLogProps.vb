@@ -11,11 +11,13 @@
 Imports Newtonsoft.Json
 
 Public Class ObjListObjectsLogProps
-   Private ReadOnly iBase As IungoBase
+   ReadOnly iBase As IungoBase
 
+#Region "Constructor"
    Public Sub New(iBase As IungoBase)
       Me.iBase = iBase
    End Sub
+#End Region
 
    Public Function GetData() As ObjectListObjectsLogPropsJSON
       Return JsonConvert.DeserializeObject(Of ObjectListObjectsLogPropsJSON)(Me.iBase.ApiRequest("{""method"":""object_list_objects_log_props""}"))

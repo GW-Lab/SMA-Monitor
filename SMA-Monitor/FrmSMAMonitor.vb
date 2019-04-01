@@ -91,15 +91,15 @@ Public Class FrmSMAMonitor
 
    Private Async Sub TmrMain_TickAsync(sender As Object, e As EventArgs) Handles TmrMain.Tick
       Try
-         Select Case ConvertRegistersToInt(Await Me.SB3600TL.ReadInputRegistersAsync(30201, 2))
+         Select Case ConvertToInt(Await Me.SB3600TL.ReadInputAsync(30201, 2))
             Case SB3600TLStatus.Ok
                LblStatusValue.BackColor = Color.Green
 
                If Me.DisplayPower Then
-                  Dim power = Await Me.SB3600TL.ReadInputRegistersAsync(30775, 2)                                                                              ' 30775 True Power -> Alternative: 308805 reactive power or apperent power 30813
-                  power(0) = CByte(power(0) And &B0111_1111)                                                                                                   ' Remove sign bit
-                  LblSunPowerVal.Text = ConvertRegistersToInt(power).ToString()                                                                                ' Power in W(att)
-                  LblUsedPowerVal.Text = (Me.iungo.Electricity("usage").Energy.Current + ConvertRegistersToInt(power)).ToString
+                  Dim power = Await Me.SB3600TL.ReadInputAsync(30775, 2)                                                                              ' 30775 True Power -> Alternative: 308805 reactive power or apperent power 30813
+                  power(0) = CByte(power(0) And &B0111_1111)                                                                                          ' Remove sign bit
+                  LblSunPowerVal.Text = ConvertToInt(power).ToString()                                                                                ' Power in W(att)
+                  LblUsedPowerVal.Text = (Me.iungo.Electricity("usage").Energy.Current + ConvertToInt(power)).ToString
 
                   Dim totalUsedPower = CInt(LblSunPowerVal.Text) - CSng(LblUsedPowerVal.Text)
                   LblUsedPowerTotalVal.BackColor = If(totalUsedPower >= 0, Color.LightGreen, Color.Red)
@@ -110,24 +110,24 @@ Public Class FrmSMAMonitor
                Else
                   Select Case Me.Display
                      Case DisplayItem.Volt
-                        Dim voltage = Await Me.SB3600TL.ReadInputRegistersAsync(30783, 2)
-                        LblVoltageValue.Text = (ConvertRegistersToInt(voltage) / 100).ToString("#0.0")
+                        Dim voltage = Await Me.SB3600TL.ReadInputAsync(30783, 2)
+                        LblVoltageValue.Text = (ConvertToInt(voltage) / 100).ToString("#0.0")
                         Me.Display = DisplayItem.Ampere
                      Case DisplayItem.Ampere
-                        Dim ampere = Await Me.SB3600TL.ReadInputRegistersAsync(30795, 2)
-                        LblAmpereValue.Text = (ConvertRegistersToInt(ampere) / 1000).ToString("#0.0")
+                        Dim ampere = Await Me.SB3600TL.ReadInputAsync(30795, 2)
+                        LblAmpereValue.Text = (ConvertToInt(ampere) / 1000).ToString("#0.0")
                         Me.Display = DisplayItem.Temp
                      Case DisplayItem.Temp
-                        Dim temp = Await Me.SB3600TL.ReadInputRegistersAsync(34113, 2)
+                        Dim temp = Await Me.SB3600TL.ReadInputAsync(34113, 2)
                         ' Alternative: 30963
-                        temp(0) = CByte(temp(0) And &B0111_1111)                                                                                               ' Remove sign bit
-                        LblTempCelsiusValue.Text = (ConvertRegistersToInt(temp) / 10).ToString("#0.0")
+                        temp(0) = CByte(temp(0) And &B0111_1111)                                                                                   ' Remove sign bit
+                        LblTempCelsiusValue.Text = (ConvertToInt(temp) / 10).ToString("#0.0")
                         Me.Display = DisplayItem.DailyYield
                      Case DisplayItem.DailyYield
-                        LblDayYieldValue.Text = (ConvertRegistersToLong(Await Me.SB3600TL.ReadInputRegistersAsync(30517, 4)) / 1000).ToString("#0.00")         ' kWh 
+                        LblDayYieldValue.Text = (ConvertToLong(Await Me.SB3600TL.ReadInputAsync(30517, 4)) / 1000).ToString("#0.00")               ' kWh 
                         Me.Display = DisplayItem.TotalYield
                      Case DisplayItem.TotalYield
-                        LblTotalYieldValue.Text = (ConvertRegistersToLong(Await Me.SB3600TL.ReadInputRegistersAsync(30513, 4)) / 1000000).ToString("##0.00")   ' MWh
+                        LblTotalYieldValue.Text = (ConvertToLong(Await Me.SB3600TL.ReadInputAsync(30513, 4)) / 1000000).ToString("##0.00")         ' MWh
                         Me.Display = DisplayItem.Volt
                   End Select
 

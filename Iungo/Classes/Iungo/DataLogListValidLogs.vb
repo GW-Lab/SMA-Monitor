@@ -11,7 +11,7 @@
 Imports Newtonsoft.Json
 
 Public Class DataLogListValidLogs : Inherits Dictionary(Of String, DataLog)
-   Private ReadOnly iBase As IungoBase
+   ReadOnly iBase As IungoBase
 
    Public Sub New(iBase As IungoBase)
       Me.iBase = iBase

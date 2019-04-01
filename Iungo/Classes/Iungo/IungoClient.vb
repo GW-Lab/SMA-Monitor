@@ -18,6 +18,7 @@ Public Class IungoClient : Inherits IungoBase
    Public ZWave As New ZWave
    Public Weather As Weather
 
+#Region "Constructor"
    Public Sub New(ip As IPAddress)
       MyBase.New(ip)
       Dim dataloglistvalidlogs = New DataLogListValidLogs(Me).GetData.Rv.Logs
@@ -54,6 +55,7 @@ Public Class IungoClient : Inherits IungoBase
 
       Me.Status = If(Me.Electricity.Count > 0, ConnectionState.Open, ConnectionState.Closed)
    End Sub
+#End Region
 
 #Region "Remove all user settings and logs"
    Public Function Reboot() As String

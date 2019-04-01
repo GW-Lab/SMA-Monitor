@@ -11,7 +11,8 @@
 Imports Newtonsoft.Json
 
 Public Class Solar
-   Private ReadOnly iBase As IungoBase
+   ReadOnly iBase As IungoBase
+
    Public ReadOnly oid As String
 
    Public P1L As DataLog
@@ -32,6 +33,7 @@ Public Class Solar
       Voltage
    End Enum
 
+#Region "Constructor"
    Public Sub New(oid As String, iBase As IungoBase)
       Me.iBase = iBase
       Me.oid = oid
@@ -45,6 +47,7 @@ Public Class Solar
       Me.ppkwh = New DataLog(oid, SolarProp.ppkwh.ToString.ToLower, iBase)
       Me.Voltage = New DataLog(oid, SolarProp.Voltage.ToString.ToLower, iBase)
    End Sub
+#End Region
 
    Public Function Value(prop As SolarProp) as double
       Return JsonConvert.DeserializeObject(Of SolarJSON)(Me.iBase.ObjectPropGet(Me.oid, prop.ToString)).Rv.Value

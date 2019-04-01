@@ -11,10 +11,10 @@
 Imports Newtonsoft.Json
 
 Public Class Device
-   Private ReadOnly GWI As IungoBase
-   Public ReadOnly oid As String
-   Private ReadOnly prop As String
+   ReadOnly GWI As IungoBase
+   ReadOnly prop As String
 
+   Public ReadOnly oid As String
    Public Power As DataLog
    Public Energy As DataLog
 

@@ -12,9 +12,9 @@
 Imports Newtonsoft.Json
 
 Public Class DataLog
-   Private ReadOnly iBase As IungoBase
-   Private ReadOnly oid As String
-   Private ReadOnly prop As String
+   ReadOnly iBase As IungoBase
+   ReadOnly oid As String
+   ReadOnly prop As String
 
    Public Sub New(oid As String, prop As String, iBase As IungoBase)
       Me.iBase = iBase

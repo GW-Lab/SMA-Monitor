@@ -6,7 +6,8 @@
 ' Notes....: VB 16.0 RC4 .NET Framework 4.7.2
 ' Files....: None
 ' Programs.:
-' Reserved.: Type Class (ZWave)
+' Reserved.: Type Class (ZWave) Host a collection of ZWave switches
+
 Public Class ZWave
    Public PowerSwitches As New PowerSwitches
 End Class

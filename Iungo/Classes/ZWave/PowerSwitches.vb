@@ -31,6 +31,7 @@ Public Class PowerSwitch
       [On]
    End Enum
 
+#Region "Constructor"
    Public Sub New(oid As String, iBase As IungoBase)
       Me.IBase = iBase
       Me.Oid = oid
@@ -39,6 +40,7 @@ Public Class PowerSwitch
       Me.Energy = New DataLog(oid, "usage", iBase)
       Me.Power = New DataLog(oid, "power", iBase)
    End Sub
+#End Region
 
    Public Property State As PowerSwitchOnOff
       Get

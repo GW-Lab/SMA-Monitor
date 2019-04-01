@@ -2,24 +2,23 @@
 Imports System.Net.Sockets
 
 Public Class ModBusBase : Inherits TcpClient
-   Private ReadOnly MaxRegistersToReadOrWrite As Byte = 125                                           ' ModBus registers   125 maximal to read/write in a command
-   Private ReadOnly MaxRegisterAddresses As UShort = 65535                                            ' ModBus addresses 65535 maximal
+   ReadOnly MaxRegistersToReadOrWrite As Byte = 125                                                                     ' ModBus registers   125 maximal to read/write in a command
+   ReadOnly MaxRegisterAddresses As UShort = 65535                                                                      ' ModBus addresses 65535 maximal
+   ReadOnly ConnectionTimeout As Integer = 1000                                                                         ' Connection Timeout in case of ModbusTCP connection
+   ReadOnly IPAddress As IPAddress                                                                                      ' IP-Address of the Server.
+   ReadOnly Port As Integer = 502                                                                                       ' Port were the Modbus-TCP Server is reachable (Standard is 502).
+   ReadOnly UnitID As Byte = &H1                                                                                        ' Unit identifier in case of serial connection (Default = 0)
 
    Private networkStream As NetworkStream
-   Private transactionID As UShort = 0                                                                ' Unique (generated) indentifier for Each command send to the ModBus   
+   Private transactionID As UShort = 0                                                                                  ' Unique (generated) indentifier for Each command send to the ModBus   
 
-   Private ReadOnly ConnectionTimeout As Integer = 1000                                               ' Gets the connection Timeout in case of ModbusTCP connection
-   Private ReadOnly IPAddress As IPAddress                                                            ' Gets the IP-Address of the Server.
-   Private ReadOnly Port As Integer = 502                                                             ' Gets the Port were the Modbus-TCP Server is reachable (Standard is 502).
-   Private ReadOnly UnitID As Byte = &H1                                                              ' Gets the Unit identifier in case of serial connection (Default = 0)
-
-   Public Sub New(unitID As Byte, ipAddress As IPAddress, Optional port As Integer = 502)             ' Constructor which determines the Master ip-address and the Master Port.
+   Public Sub New(unitID As Byte, ipAddress As IPAddress, Optional port As Integer = 502)                               ' Constructor which determines the Master ip-address and the Master Port.
       Me.UnitID = unitID
       Me.IPAddress = ipAddress
       Me.Port = port
    End Sub
 
-   Public Overloads Sub Connect()                                                                     ' Establish a TCP connection to a ModBus-device 
+   Public Overloads Sub Connect()                                                                                       ' Establish a TCP connection to a ModBus-device 
       Connect(Me.IPAddress, Me.Port)
 
       If Connected Then
@@ -31,22 +30,22 @@ Public Class ModBusBase : Inherits TcpClient
       End If
    End Sub
 
-   Public Async Function ReadHoldingRegistersAsync(startingAddress As UShort, quantity As UShort) As Task(Of Byte())   ' Read Holding Registers from Master device (FC3).
+   Public Async Function ReadHoldingAsync(startingAddress As UShort, quantity As UShort) As Task(Of Byte())             ' Read Holding Register(s) from Master device (FC3).
       If Connected Then
          If startingAddress > Me.MaxRegisterAddresses OrElse quantity > Me.MaxRegistersToReadOrWrite Then Throw New ArgumentException($"Starting address must be 0 - {Me.MaxRegisterAddresses}; quantity must be 0 - {Me.MaxRegistersToReadOrWrite}")
 
          Me.transactionID += 1US
 
          Dim packet = New ModBusPacket
-         packet.AddRange(BitConverter.GetBytes(Me.transactionID).Reverse)                             ' TransAction ID
-         packet.AddRange(BitConverter.GetBytes(&H0US).Reverse)                                        ' Protocol   
-         packet.AddRange(BitConverter.GetBytes(&H6US).Reverse)                                        ' Length
-         packet.AddRange({Me.UnitID, &H3})                                                            ' UnitIndentifier/ModBus Fuction Code 3
-         packet.AddRange(BitConverter.GetBytes(startingAddress).Reverse)                              ' StartAddress
-         packet.AddRange(BitConverter.GetBytes(quantity).Reverse)                                     ' Quantity   
-         packet.ComputeCRC()                                                                          ' Read ALL data added to the packet until now Compute CRC16 and append the CRC16 to the packet   
+         packet.AddRange(BitConverter.GetBytes(Me.transactionID).Reverse)                                               ' TransAction ID
+         packet.AddRange(BitConverter.GetBytes(&H0US).Reverse)                                                          ' Protocol   
+         packet.AddRange(BitConverter.GetBytes(&H6US).Reverse)                                                          ' Length
+         packet.AddRange({Me.UnitID, &H3})                                                                              ' UnitIndentifier/ModBus Fuction Code 3 Read Holding register
+         packet.AddRange(BitConverter.GetBytes(startingAddress).Reverse)                                                ' StartAddress
+         packet.AddRange(BitConverter.GetBytes(quantity).Reverse)                                                       ' Quantity   
+         packet.ComputeCRC()                                                                                            ' Read ALL data added to the packet until now Compute CRC16 and append the CRC16 to the packet   
 
-         Dim receiveBuffer As Byte() = {}                                                             ' Create a Respons buffer
+         Dim receiveBuffer As Byte() = {}                                                                               ' Create a Respons buffer
 
          If Client.Connected Then
             Await Me.networkStream.WriteAsync(packet.ToArray, 0, packet.Count - 2)
@@ -73,7 +72,7 @@ Public Class ModBusBase : Inherits TcpClient
       End If
    End Function
 
-   Public Async Function ReadInputRegistersAsync(startingAddress As UShort, quantity As UShort) As Task(Of Byte())
+   Public Async Function ReadInputAsync(startingAddress As UShort, quantity As UShort) As Task(Of Byte())            ' Read Input Register(s) from Master device (FC3).
       If Connected Then
          If startingAddress > Me.MaxRegisterAddresses OrElse quantity > Me.MaxRegistersToReadOrWrite Then Throw New ArgumentException($"Starting address must be 0 - {Me.MaxRegisterAddresses}; quantity must be 0 - {Me.MaxRegistersToReadOrWrite}")
 
@@ -83,7 +82,7 @@ Public Class ModBusBase : Inherits TcpClient
          packet.AddRange(BitConverter.GetBytes(Me.transactionID).Reverse)                             ' TransAction ID
          packet.AddRange(BitConverter.GetBytes(&H0US).Reverse)                                        ' Protocol   
          packet.AddRange(BitConverter.GetBytes(&H6US).Reverse)                                        ' Length
-         packet.AddRange({Me.UnitID, &H4})                                                            ' UnitIndentifier/ModBus Fuction Code 4
+         packet.AddRange({Me.UnitID, &H4})                                                            ' UnitIndentifier/ModBus Fuction Code 4 Read input Register(s)
          packet.AddRange(BitConverter.GetBytes(startingAddress).Reverse)                              ' StartAddress
          packet.AddRange(BitConverter.GetBytes(quantity).Reverse)                                     ' Quantity   
          packet.ComputeCRC()                                                                          ' Use ALL packet data (except CRC bytes) and Compute the CRC16 and append the CRC16 to the packet  
@@ -132,6 +131,7 @@ Public Class ModBusBase : Inherits TcpClient
       End Try
    End Sub
 
+#Region "CRC16"
    ' 6.2.2 CRC Generation from the MODBUS Specification V1.02
 
    ' A procedure For generating a CRC Is 
@@ -165,4 +165,6 @@ Public Class ModBusBase : Inherits TcpClient
 
       Return BitConverter.GetBytes(crc)
    End Function
+#End Region
+
 End Class

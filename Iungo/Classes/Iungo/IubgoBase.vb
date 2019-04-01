@@ -16,11 +16,13 @@ Imports System.Net
 Imports Newtonsoft.Json
 
 Public Class IungoBase : Inherits WebRequest
-   Private ReadOnly URI As Uri
+   ReadOnly URI As Uri
 
+#Region "Constructror"
    Public Sub New(ip As IPAddress)
       Me.URI = New Uri($"Http://{ip.ToString}/iungo/api_request")
    End Sub
+#End Region
 
    Public Shared Function GetMyIungoIP() As IPAddress
       Try
