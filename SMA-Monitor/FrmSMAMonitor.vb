@@ -5,7 +5,7 @@
 ' Notice...: Copyright 1999, All Rights Reserved
 ' Notes....: VB 16.0 RC4 .NET Framework 4.7.2
 ' Files....: None
-' Programs.:
+' GitHub...: https://github.com/GW-Lab/SMA-Monitor.git
 ' Reserved.:This SOFTWARE PRODUCT is provided by THE PROVIDER "as is" and "with all faults." THE PROVIDER makes no representations or warranties of any kind concerning the safety,
 '          : suitability, lack Of viruses, inaccuracies, typographical errors, Or other harmful components Of this SOFTWARE PRODUCT.
 '          : There are inherent dangers In the use Of any software, And you are solely responsible For determining whether this SOFTWARE PRODUCT Is compatible With your equipment
@@ -19,10 +19,11 @@ Imports GWModBus.ModBusClient
 Imports GWIungo
 
 Public Class FrmSMAMonitor
+   Const RemoveMSBMask As Byte = &B0111_1111
    Private SB3600TL As ModBusClient
    Private iungo As IungoClient
 
-   Private Display As DisplayItem
+   Private CurrDisplay As DisplayItem
    Private DisplayPower As Boolean = True
 
    Enum SB3600TLStatus As Integer
@@ -58,7 +59,7 @@ Public Class FrmSMAMonitor
       TopMost = My.Settings.TopMost
       Location = New Point(My.Settings.LocationX, My.Settings.LocationY)
 
-      Me.Display = DisplayItem.Volt
+      Me.CurrDisplay = DisplayItem.Volt
 
       Try
          Me.SB3600TL = New ModBusClient(My.Settings.ModBusID, Net.IPAddress.Parse(My.Settings.IPAddress), 502)
@@ -93,11 +94,11 @@ Public Class FrmSMAMonitor
       Try
          Select Case ConvertToInt(Await Me.SB3600TL.ReadInputAsync(30201, 2))
             Case SB3600TLStatus.Ok
-               LblStatusValue.BackColor = Color.Green
-
                If Me.DisplayPower Then
+                  LblStatusValue.BackColor = Color.Green
+
                   Dim power = Await Me.SB3600TL.ReadInputAsync(30775, 2)                                                                              ' 30775 True Power -> Alternative: 308805 reactive power or apperent power 30813
-                  power(0) = CByte(power(0) And &B0111_1111)                                                                                          ' Remove sign bit
+                  power(0) = power(0) And RemoveMSBMask                                                                                           ' Remove sign bit
                   LblSunPowerVal.Text = ConvertToInt(power).ToString()                                                                                ' Power in W(att)
                   LblUsedPowerVal.Text = (Me.iungo.Electricity("usage").Energy.Current + ConvertToInt(power)).ToString
 
@@ -108,27 +109,27 @@ Public Class FrmSMAMonitor
 
                   Me.DisplayPower = False
                Else
-                  Select Case Me.Display
+                  Select Case Me.CurrDisplay
                      Case DisplayItem.Volt
                         Dim voltage = Await Me.SB3600TL.ReadInputAsync(30783, 2)
                         LblVoltageValue.Text = (ConvertToInt(voltage) / 100).ToString("#0.0")
-                        Me.Display = DisplayItem.Ampere
+                        Me.CurrDisplay = DisplayItem.Ampere
                      Case DisplayItem.Ampere
                         Dim ampere = Await Me.SB3600TL.ReadInputAsync(30795, 2)
                         LblAmpereValue.Text = (ConvertToInt(ampere) / 1000).ToString("#0.0")
-                        Me.Display = DisplayItem.Temp
+                        Me.CurrDisplay = DisplayItem.Temp
                      Case DisplayItem.Temp
                         Dim temp = Await Me.SB3600TL.ReadInputAsync(34113, 2)
                         ' Alternative: 30963
-                        temp(0) = CByte(temp(0) And &B0111_1111)                                                                                   ' Remove sign bit
+                        temp(0) = temp(0) And RemoveMSBMask                                                                                        ' Remove sign bit
                         LblTempCelsiusValue.Text = (ConvertToInt(temp) / 10).ToString("#0.0")
-                        Me.Display = DisplayItem.DailyYield
+                        Me.CurrDisplay = DisplayItem.DailyYield
                      Case DisplayItem.DailyYield
                         LblDayYieldValue.Text = (ConvertToLong(Await Me.SB3600TL.ReadInputAsync(30517, 4)) / 1000).ToString("#0.00")               ' kWh 
-                        Me.Display = DisplayItem.TotalYield
+                        Me.CurrDisplay = DisplayItem.TotalYield
                      Case DisplayItem.TotalYield
                         LblTotalYieldValue.Text = (ConvertToLong(Await Me.SB3600TL.ReadInputAsync(30513, 4)) / 1000000).ToString("##0.00")         ' MWh
-                        Me.Display = DisplayItem.Volt
+                        Me.CurrDisplay = DisplayItem.Volt
                   End Select
 
                   Me.DisplayPower = True
@@ -142,7 +143,6 @@ Public Class FrmSMAMonitor
          End Select
 
          Refresh()
-
       Catch ex As Exception
          LblStatusValue.BackColor = Color.Red
          LblSunPowerVal.Text = "0"

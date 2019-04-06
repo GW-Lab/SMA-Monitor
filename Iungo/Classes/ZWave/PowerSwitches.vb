@@ -26,7 +26,7 @@ Public Class PowerSwitch
       State = 2
    End Enum
 
-   Enum PowerSwitchOnOff
+   Enum PowerSwitchStatus
       Off
       [On]
    End Enum
@@ -42,11 +42,11 @@ Public Class PowerSwitch
    End Sub
 #End Region
 
-   Public Property State As PowerSwitchOnOff
+   Public Property State As PowerSwitchStatus
       Get
-         Return If(JsonConvert.DeserializeObject(Of PowerSwitchOnOffJSON)(Me.IBase.ObjectPropGet(Me.Oid, PowerSwitchEnum.State.ToString)).Rv.Value = "on", PowerSwitchOnOff.On, PowerSwitchOnOff.Off)
+         Return If(JsonConvert.DeserializeObject(Of PowerSwitchOnOffJSON)(Me.IBase.ObjectPropGet(Me.Oid, PowerSwitchEnum.State.ToString)).Rv.Value = "on", PowerSwitchStatus.On, PowerSwitchStatus.Off)
       End Get
-      Set(value As PowerSwitchOnOff)
+      Set(value As PowerSwitchStatus)
          Dim dummy = ObjPropSet(value)
       End Set
    End Property
@@ -57,7 +57,7 @@ Public Class PowerSwitch
       End Get
    End Property
 
-   Private ReadOnly Property ObjPropSet(cmd As PowerSwitchOnOff) As String ' {"type":"response","time":0.013969507999718,"systime":1509965198,"error":{}}
+   Private ReadOnly Property ObjPropSet(cmd As PowerSwitchStatus) As String ' {"type":"response","time":0.013969507999718,"systime":1509965198,"error":{}}
       Get
          Return Me.IBase.ObjectPropSet(Me.Oid, "command", cmd.ToString.ToLower)
          '"{""method"":""object_prop_set"",""arguments"":{""oid"":""" + Me.oid + """,""prop"":""command"",""value"":""" + cmd.ToString + """}}"
