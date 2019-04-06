@@ -43,7 +43,7 @@ Public Class ModBusBase : Inherits TcpClient
          packet.AddRange({Me.UnitID, &H3})                                                                              ' UnitIndentifier/ModBus Fuction Code 3 Read Holding register
          packet.AddRange(BitConverter.GetBytes(startingAddress).Reverse)                                                ' StartAddress
          packet.AddRange(BitConverter.GetBytes(quantity).Reverse)                                                       ' Quantity   
-         packet.ComputeCRC()                                                                                            ' Read ALL data added to the packet until now Compute CRC16 and append the CRC16 to the packet   
+         packet.AddCRC()                                                                                            ' Read ALL data added to the packet until now Compute CRC16 and append the CRC16 to the packet   
 
          Dim receiveBuffer As Byte() = {}                                                                               ' Create a Respons buffer
 
@@ -80,12 +80,12 @@ Public Class ModBusBase : Inherits TcpClient
 
          Dim packet = New ModBusPacket
          packet.AddRange(BitConverter.GetBytes(Me.transactionID).Reverse)                             ' TransAction ID
-         packet.AddRange(BitConverter.GetBytes(&H0US).Reverse)                                        ' Protocol   
+         packet.AddRange(BitConverter.GetBytes(&H0US).Reverse)                                        ' Protocol   0=TCP
          packet.AddRange(BitConverter.GetBytes(&H6US).Reverse)                                        ' Length
          packet.AddRange({Me.UnitID, &H4})                                                            ' UnitIndentifier/ModBus Fuction Code 4 Read input Register(s)
          packet.AddRange(BitConverter.GetBytes(startingAddress).Reverse)                              ' StartAddress
          packet.AddRange(BitConverter.GetBytes(quantity).Reverse)                                     ' Quantity   
-         packet.ComputeCRC()                                                                          ' Use ALL packet data (except CRC bytes) and Compute the CRC16 and append the CRC16 to the packet  
+         packet.AddCRC()                                                                              ' Use ALL packet data (except CRC bytes) and Compute the CRC16 and append the CRC16 to the packet  
 
          Dim receiveBuffer As Byte() = {}                                                             ' Create Respons a buffer
 
