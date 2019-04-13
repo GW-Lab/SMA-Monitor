@@ -6,7 +6,7 @@ Public Class ModBusClient : Inherits ModBusBase
       MyBase.New(unitIdentifier, ipAddress, port)
    End Sub
 
-   Public Shared Function ConvertToFloat(registers As Byte()) As Single
+   Public Shared Function ConvertToSingle(registers As Byte()) As Single
       If registers.Length = 4 Then
          Return BitConverter.ToSingle({registers(3), registers(2), registers(1), registers(0)}, 0)
       Else
@@ -38,7 +38,7 @@ Public Class ModBusClient : Inherits ModBusBase
       End If
    End Function
 
-   Public Shared Function ConvertFloatToBytes(value As Single) As Byte()
+   Public Shared Function ConvertSingleToBytes(value As Single) As Byte()
       Return BitConverter.GetBytes(value)
    End Function
 

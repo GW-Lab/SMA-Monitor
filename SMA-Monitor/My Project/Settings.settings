@@ -2,9 +2,6 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="My" GeneratedClassName="MySettings" UseMySettingsClassName="true">
   <Profiles />
   <Settings>
-    <Setting Name="IPAddress" Type="System.String" Scope="User">
-      <Value Profile="(Default)">192.168.2.10</Value>
-    </Setting>
     <Setting Name="TopMost" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
@@ -19,6 +16,12 @@
     </Setting>
     <Setting Name="ModBusID" Type="System.Byte" Scope="User">
       <Value Profile="(Default)">3</Value>
+    </Setting>
+    <Setting Name="IP_Iungo" Type="System.String" Scope="User">
+      <Value Profile="(Default)">192.168.2.122</Value>
+    </Setting>
+    <Setting Name="IP_SMA" Type="System.String" Scope="User">
+      <Value Profile="(Default)">192.168.2.10</Value>
     </Setting>
   </Settings>
 </SettingsFile>

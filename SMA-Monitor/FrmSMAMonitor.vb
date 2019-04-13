@@ -62,10 +62,10 @@ Public Class FrmSMAMonitor
       Me.CurrDisplay = DisplayItem.Volt
 
       Try
-         Me.SB3600TL = New ModBusClient(My.Settings.ModBusID, Net.IPAddress.Parse(My.Settings.IPAddress), 502)
+         Me.SB3600TL = New ModBusClient(My.Settings.ModBusID, Net.IPAddress.Parse(My.Settings.IP_SMA), 502)
          Me.SB3600TL.Connect()
 
-         Me.iungo = New IungoClient(New Net.IPAddress({192, 168, 2, 122}))
+         Me.iungo = New IungoClient(Net.IPAddress.Parse(My.Settings.IP_Iungo))
          LblStatusValue.BackColor = Color.Green
       Catch ex As Exception
          LblStatusValue.BackColor = Color.Red

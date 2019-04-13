@@ -56,18 +56,6 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("192.168.2.10")>  _
-        Public Property IPAddress() As String
-            Get
-                Return CType(Me("IPAddress"),String)
-            End Get
-            Set
-                Me("IPAddress") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
         Public Property TopMost() As Boolean
             Get
@@ -123,6 +111,30 @@ Namespace My
             End Get
             Set
                 Me("ModBusID") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("192.168.2.122")>  _
+        Public Property IP_Iungo() As String
+            Get
+                Return CType(Me("IP_Iungo"),String)
+            End Get
+            Set
+                Me("IP_Iungo") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("192.168.2.10")>  _
+        Public Property IP_SMA() As String
+            Get
+                Return CType(Me("IP_SMA"),String)
+            End Get
+            Set
+                Me("IP_SMA") = value
             End Set
         End Property
     End Class
