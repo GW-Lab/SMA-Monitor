@@ -22,7 +22,7 @@
 
    Private Sub BtnOK_Click(sender As Object, e As EventArgs) Handles btnOK.Click
       My.Settings.Interval = CInt(NudInverval.Value)
-      My.Settings.ModBusID = CByte(NudInverval.Value)
+      My.Settings.ModBusID = CByte(NudModBusID.Value)
       My.Settings.TopMost = ChkTopMost.Checked
 
       My.Settings.IP_SMA = IpbSMA.Text

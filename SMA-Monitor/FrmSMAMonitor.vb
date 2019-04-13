@@ -3,7 +3,7 @@
 ' Design...:
 ' Date.....: 15/11/2017 Last revised: 19/09/2018
 ' Notice...: Copyright 1999, All Rights Reserved
-' Notes....: VB 16.0 RC4 .NET Framework 4.7.2
+' Notes....: VB 16.0.1 .NET Framework 4.7.2
 ' Files....: None
 ' GitHub...: https://github.com/GW-Lab/SMA-Monitor.git
 ' Reserved.:This SOFTWARE PRODUCT is provided by THE PROVIDER "as is" and "with all faults." THE PROVIDER makes no representations or warranties of any kind concerning the safety,
@@ -101,7 +101,7 @@ Public Class FrmSMAMonitor
                   LblStatusValue.BackColor = Color.Green
 
                   Dim power = Await Me.SB3600TL.ReadInputAsync(30775, 2)                                                                              ' 30775 True Power -> Alternative: 308805 reactive power or apperent power 30813
-                  power(0) = power(0) And RemoveMSBMask                                                                                           ' Remove sign bit
+                  power(0) = power(0) And RemoveMSBMask                                                                                               ' Remove sign bit
                   LblSunPowerVal.Text = ConvertToInt(power).ToString()                                                                                ' Power in W(att)
                   LblUsedPowerVal.Text = (Me.iungo.Electricity("usage").Energy.Current + ConvertToInt(power)).ToString
 
