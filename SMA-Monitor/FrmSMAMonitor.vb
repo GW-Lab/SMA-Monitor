@@ -66,6 +66,9 @@ Public Class FrmSMAMonitor
          Me.SB3600TL.Connect()
 
          Me.iungo = New IungoClient(Net.IPAddress.Parse(My.Settings.IP_Iungo))
+
+         ' Me.iungo.ZWave.PowerSwitches("Iungo switch Name").State = PowerSwitch.PowerSwitchStatus.Off
+
          LblStatusValue.BackColor = Color.Green
       Catch ex As Exception
          LblStatusValue.BackColor = Color.Red
