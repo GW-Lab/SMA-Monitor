@@ -30,3 +30,7 @@ The live Inverter information:
 For people that are intrerested in domotica:
 There is also the posibility to monitor live the power usages of your home via the Iungo-Energy-manager (https://www.iungo.nl/nl/)
 and operate some ZWave switches to power a electrical devices.
+
+How to use Iungo ZWave switches:
+1. Me.iungo = New IungoClient(Net.IPAddress.Parse(My.Settings.IP_Iungo))
+2. Me.iungo.ZWave.PowerSwitches("Iungo-switch-Name").State = PowerSwitch.PowerSwitchStatus.Off
