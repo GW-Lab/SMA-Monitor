@@ -32,5 +32,6 @@ There is also the posibility to monitor live the power usages of your home via t
 and operate some ZWave switches to power a electrical devices.
 
 How to use Iungo ZWave switches:
+
  Me.iungo = New IungoClient(Net.IPAddress.Parse(My.Settings.IP_Iungo))
  Me.iungo.ZWave.PowerSwitches("Iungo-switch-Name").State = PowerSwitch.PowerSwitchStatus.Off
