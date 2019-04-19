@@ -4,7 +4,7 @@ This small VB.NET program is for live monitoring your SMA-SB3600TL-21 inverter o
 Program:
 VB.NET
 Winforms
-.Net framwork 4.8
+.Net framwork 4.8 , 
 .Net JSON
 
 Devices:
