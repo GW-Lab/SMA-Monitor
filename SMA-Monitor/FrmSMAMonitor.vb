@@ -66,7 +66,6 @@ Public Class FrmSMAMonitor
          Me.SB3600TL.Connect()
 
          Me.iungo = New IungoClient(Net.IPAddress.Parse(My.Settings.IP_Iungo))
-
          ' Me.iungo.ZWave.PowerSwitches("Iungo switch Name").State = PowerSwitch.PowerSwitchStatus.Off
 
          LblStatusValue.BackColor = Color.Green
@@ -95,7 +94,7 @@ Public Class FrmSMAMonitor
 
    Private Async Sub TmrMain_TickAsync(sender As Object, e As EventArgs) Handles TmrMain.Tick
       Try
-         Select Case ConvertToInt(Await Me.SB3600TL.ReadInputAsync(30201, 2))
+         Select Case ConvertToInt(Await Me.SB3600TL.ReadInputAsync(30201, 2))                                                                         ' Get Status from Inverter register number 30201
             Case SB3600TLStatus.Ok
                If Me.DisplayPower Then
                   LblStatusValue.BackColor = Color.Green
@@ -114,24 +113,24 @@ Public Class FrmSMAMonitor
                Else
                   Select Case Me.CurrDisplay
                      Case DisplayItem.Volt
-                        Dim voltage = Await Me.SB3600TL.ReadInputAsync(30783, 2)
+                        Dim voltage = Await Me.SB3600TL.ReadInputAsync(30783, 2)                                                                      ' Get voltage from the inverter register number 30783
                         LblVoltageValue.Text = (ConvertToInt(voltage) / 100).ToString("#0.0")
                         Me.CurrDisplay = DisplayItem.Ampere
                      Case DisplayItem.Ampere
-                        Dim ampere = Await Me.SB3600TL.ReadInputAsync(30795, 2)
+                        Dim ampere = Await Me.SB3600TL.ReadInputAsync(30795, 2)                                                                       ' Get ampere from the inverter register number 30795
                         LblAmpereValue.Text = (ConvertToInt(ampere) / 1000).ToString("#0.0")
                         Me.CurrDisplay = DisplayItem.Temp
                      Case DisplayItem.Temp
-                        Dim temp = Await Me.SB3600TL.ReadInputAsync(34113, 2)
+                        Dim temp = Await Me.SB3600TL.ReadInputAsync(34113, 2)                                                                         ' Get Temperature from the inverter register Number 34113 
                         ' Alternative: 30963
-                        temp(0) = temp(0) And RemoveMSBMask                                                                                        ' Remove sign bit
+                        temp(0) = temp(0) And RemoveMSBMask                                                                                           ' Remove sign bit
                         LblTempCelsiusValue.Text = (ConvertToInt(temp) / 10).ToString("#0.0")
                         Me.CurrDisplay = DisplayItem.DailyYield
                      Case DisplayItem.DailyYield
-                        LblDayYieldValue.Text = (ConvertToLong(Await Me.SB3600TL.ReadInputAsync(30517, 4)) / 1000).ToString("#0.00")               ' kWh 
+                        LblDayYieldValue.Text = (ConvertToLong(Await Me.SB3600TL.ReadInputAsync(30517, 4)) / 1000).ToString("#0.00")                  ' Get Total-day-yield (kWh) from the inverter register Number 30517 
                         Me.CurrDisplay = DisplayItem.TotalYield
                      Case DisplayItem.TotalYield
-                        LblTotalYieldValue.Text = (ConvertToLong(Await Me.SB3600TL.ReadInputAsync(30513, 4)) / 1000000).ToString("##0.00")         ' MWh
+                        LblTotalYieldValue.Text = (ConvertToLong(Await Me.SB3600TL.ReadInputAsync(30513, 4)) / 1000000).ToString("##0.00")            ' Get Total-yield (kWh) from the inverter register Number 30513 
                         Me.CurrDisplay = DisplayItem.Volt
                   End Select
 
