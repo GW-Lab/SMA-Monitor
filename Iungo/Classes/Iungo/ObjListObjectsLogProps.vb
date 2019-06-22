@@ -3,7 +3,7 @@
 ' Design...: 
 ' Date.....: 15/11/2017 Last revised: 19/09/2018
 ' Notice...: Copyright 1999, All Rights Reserved
-' Notes....: VB 16.0 RC4 .NET Framework 4.7.2
+' Notes....: VB16.1.3 .NET Framework 4.8
 ' Files....: None
 ' Programs.:
 ' Reserved.: Type Class (ObjListObjectsLogProps)
@@ -11,15 +11,13 @@
 Imports Newtonsoft.Json
 
 Public Class ObjListObjectsLogProps
-   ReadOnly iBase As IungoBase
-
-#Region "Constructor"
+   Private ReadOnly iBase As IungoBase
    Public Sub New(iBase As IungoBase)
       Me.iBase = iBase
    End Sub
-#End Region
-
    Public Function GetData() As ObjectListObjectsLogPropsJSON
+      '  Dim a = Me.iBase.ApiRequest("{""method"":""object_list_objects_log_props""}")
+
       Return JsonConvert.DeserializeObject(Of ObjectListObjectsLogPropsJSON)(Me.iBase.ApiRequest("{""method"":""object_list_objects_log_props""}"))
    End Function
 End Class

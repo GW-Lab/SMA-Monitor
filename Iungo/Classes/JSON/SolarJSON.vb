@@ -3,7 +3,7 @@
 ' Design...: 
 ' Date.....: 15/11/2017 Last revised: 19/09/2018
 ' Notice...: Copyright 1999, All Rights Reserved
-' Notes....: VB 16.0 RC4 .NET Framework 4.7.2
+' Notes....: VB16.1.3 .NET Framework 4.8
 ' Files....: None
 ' Programs.:
 ' Reserved.: Type Class (SolarJSON)
@@ -22,7 +22,6 @@ Public Class SolarJSON
       Public Systime As ULong
       Public Value As UInteger
    End Class
-
    Public Function ToJsonString() As String
       Return JsonConvert.SerializeObject(Me)
    End Function

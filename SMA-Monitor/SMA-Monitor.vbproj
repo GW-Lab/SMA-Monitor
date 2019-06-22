@@ -197,10 +197,6 @@
       <Project>{756eba5c-11b4-4a9d-9569-76d6cdf19cdc}</Project>
       <Name>GWModBus</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Iungo\GWIungo.vbproj">
-      <Project>{363c6007-7182-4af1-98c3-de9d7d4563ff}</Project>
-      <Name>GWIungo</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="sb3600tl-21.ico" />

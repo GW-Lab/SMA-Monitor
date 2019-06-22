@@ -3,7 +3,7 @@
 ' Design...:
 ' Date.....: 15/11/2017 Last revised: 19/09/2018
 ' Notice...: Copyright 1999, All Rights Reserved
-' Notes....: VB 16.0 RC4 .NET Framework 4.7.2
+' Notes....: VB16.1.3 .NET Framework 4.8
 ' Files....: None
 ' Programs.:
 ' Reserved.: Type Class (IungoBase)
@@ -16,14 +16,10 @@ Imports System.Net
 Imports Newtonsoft.Json
 
 Public Class IungoBase : Inherits WebRequest
-   ReadOnly URI As Uri
-
-#Region "Constructror"
+   Private ReadOnly URI As Uri
    Public Sub New(ip As IPAddress)
       Me.URI = New Uri($"Http://{ip.ToString}/iungo/api_request")
    End Sub
-#End Region
-
    Public Shared Function GetMyIungoIP() As IPAddress
       Try
          Using response As WebResponse = CreateHttp("http://www.atedec.com/iungo/myiungoip").GetResponse
@@ -40,7 +36,6 @@ Public Class IungoBase : Inherits WebRequest
    Public Function ObjectPropGet(oid As String, prop As String) As String                                                                       ' Return ApiRequest("{""sec"":1,""method"":""object_prop_get"",""arguments"":{""oid"":""" + oid + """,""prop"":""" + prop + """}}")
       Return ApiRequest("{""method"":""object_prop_get"",""arguments"":{""oid"":""" + oid + """,""prop"":""" + prop + """}}")
    End Function
-
    Public Function ObjectPropSet(oid As String, prop As String, cmd As String) As String
       Return ApiRequest("{""method"":""object_prop_set"",""arguments"":{""oid"":""" + oid + """,""prop"":""" + prop + """,""value"":""" + cmd.ToString + """}}")
    End Function
@@ -48,6 +43,8 @@ Public Class IungoBase : Inherits WebRequest
 
 #Region "Get First/Last dates"
    Public Function DataLogGetFirst(oid As String, prop As String) As List(Of List(Of String))                                                                ' {"ok":true,"type":"response","time":0.076535414002137,"rv":{"data":[[1507054386]]},"error":false,"systime":1509739280}
+      'Work a rond via -> datalog_get_day_start_values
+
       Return JsonConvert.DeserializeObject(Of DataLogGetJSON)(ApiRequest("{""method"":""datalog_get_day_start_values"",""arguments"":{""prop"":""" + prop +
                                                                          """,""oid"":""" + oid +
                                                                          """,""t1"":""" + "0" +
@@ -55,11 +52,19 @@ Public Class IungoBase : Inherits WebRequest
    End Function
 
    Public Function DataLogGetLast(oid As String, prop As String) As List(Of List(Of String))
+      ' Do not use defect
       Return JsonConvert.DeserializeObject(Of DataLogGetJSON)(ApiRequest("{""method"":""datalog_get_day_start_values"",""arguments"":{""prop"":""" + prop +
                                                                          """,""oid"":""" + oid +
                                                                          """,""t1"":""" + "299999999999" +
                                                                          """,""t2"":""" + "999999999999" + """}}")).Rv.Data
    End Function
+
+   'Public Function DatalogGetFirstOfDay(oid As String, prop As String, timestamp As UInteger) As UInteger
+   '   Return JsonConvert.DeserializeObject(Of DataLogGetJSON)(ApiRequest("{""method"":""datalog_get_first_of_day"",
+   '                                                                      ""arguments"":{""oid"":""" + oid +
+   '                                                                      """,""prop"":""" + prop +
+   '                                                                      """,""timestamp"":""" + timestamp.ToString + """}}")).Rv.Timestamp
+   'End Function
 
    Public Function DatalogGetFirstValueAfter(oid As String, prop As String, timestamp As UInteger) As UInteger
       Return JsonConvert.DeserializeObject(Of DatalogGetFirstValueAfterJSON)(ApiRequest("{""method"":""datalog_get_first_value_after"",
@@ -67,15 +72,13 @@ Public Class IungoBase : Inherits WebRequest
                                                                                         """,""prop"":""" + prop +
                                                                                         """,""timestamp"":""" + timestamp.ToString + """}}")).Rv.Timestamp
    End Function
-
    Public Function DatalogGetLastDailyValueBefore(oid As String, prop As String, timestamp As UInteger) As UInteger
       Return JsonConvert.DeserializeObject(Of DatalogGetLastDailyValueBeforeJSON)(ApiRequest("{""method"":""datalog_get_last_daily_value_before"",
                                                                                              ""arguments"":{""oid"":""" + oid +
                                                                                              """,""prop"":""" + prop +
-                                                                                             """,""timestamp"":""" + timestamp.ToString + """}}")).Rv.Timestamp
+                                                                                             """,""timestamp"":""" + timestamp.ToString + """}}")).Rv.TimeStamp
    End Function
 #End Region
-
    Friend Function ApiRequest(jsonQuery As String) As String                                                                    '  ServicePointManager.Expect100Continue = False (see: app.config}
       Dim webReq = CreateHttp(Me.URI.AbsoluteUri)
       webReq.Method = "POST"
@@ -91,10 +94,31 @@ Public Class IungoBase : Inherits WebRequest
             End Using
          End Using
       Catch ex As Exception
+         '  MessageBox.Show("Iungo: " + ex.Message)
          Return ""
       End Try
    End Function
 End Class
+
+'Public Function Ping_Host(ByVal buffer_size As Integer, ByVal timeout As Integer) As String
+'   Dim ping_Reply = ""
+'   Dim ip = Me.Get_IP_From_Host(Me.strHostname)
+'   Dim buffer = New Byte(buffer_size - 1) {}
+'   If ip IsNot Nothing Then
+'      Using p = New Ping()
+'         Using are = New AutoResetEvent(False)
+'            p.SendAsync(ip, timeout, buffer, New PingOptions With {.Ttl = 64, .DontFragment = True}, are)
+'            p.PingCompleted += Function(o, e)
+'                                  Strping_Reply = e.Reply.Status.ToString()
+'                               End Function
+'         End Using
+'      End Using
+
+'      Return Strping_Reply
+'   Else
+'      Return Nothing
+'   End If
+'End Function
 
 '{"ok":true,
 '"type":"response",

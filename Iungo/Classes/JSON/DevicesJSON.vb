@@ -3,7 +3,7 @@
 ' Design...: 
 ' Date.....: 15/11/2017 Last revised: 19/09/2018
 ' Notice...: Copyright 1999, All Rights Reserved
-' Notes....: VB 16.0 RC4 .NET Framework 4.7.2
+' Notes....: VB16.1.3 .NET Framework 4.8
 ' Files....: None
 ' Programs.:
 ' Reserved.: Type Class (DevicesJSON)
@@ -20,7 +20,6 @@ Public Class DevicesJSON
    Public Class RVValues
       Public Objects As List(Of Values)
    End Class
-
    Public Class Values
       Public Driver As String
       Public Name As String
@@ -28,7 +27,6 @@ Public Class DevicesJSON
       Public Uid As String
       Public [Type] As String
    End Class
-
    Public Function ToJsonString() As String
       Return JsonConvert.SerializeObject(Me)
    End Function

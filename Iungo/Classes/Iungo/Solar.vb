@@ -3,7 +3,7 @@
 ' Design...:
 ' Date.....: 15/11/2017 Last revised: 19/09/2018
 ' Notice...: Copyright 1999, All Rights Reserved
-' Notes....: VB 16.0 RC4 .NET Framework 4.7.2
+' Notes....: VB16.1.3 .NET Framework 4.8
 ' Files....: None
 ' Programs.:
 ' Reserved.: Type Class (Solar)
@@ -11,8 +11,7 @@
 Imports Newtonsoft.Json
 
 Public Class Solar
-   ReadOnly iBase As IungoBase
-
+   Private ReadOnly iBase As IungoBase
    Public ReadOnly oid As String
 
    Public P1L As DataLog
@@ -32,8 +31,6 @@ Public Class Solar
       Solar
       Voltage
    End Enum
-
-#Region "Constructor"
    Public Sub New(oid As String, iBase As IungoBase)
       Me.iBase = iBase
       Me.oid = oid
@@ -47,9 +44,7 @@ Public Class Solar
       Me.ppkwh = New DataLog(oid, SolarProp.ppkwh.ToString.ToLower, iBase)
       Me.Voltage = New DataLog(oid, SolarProp.Voltage.ToString.ToLower, iBase)
    End Sub
-#End Region
-
-   Public Function Value(prop As SolarProp) as double
+   Public Function Value(prop As SolarProp) As Double
       Return JsonConvert.DeserializeObject(Of SolarJSON)(Me.iBase.ObjectPropGet(Me.oid, prop.ToString)).Rv.Value
    End Function
 End Class
