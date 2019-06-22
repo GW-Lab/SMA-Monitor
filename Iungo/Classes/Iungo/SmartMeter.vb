@@ -11,7 +11,7 @@
 ' power, usage, Cost - T1, Cost - T2, Cost - gas, gas, L1Pimp, L1I, L1Pexp, L2Pimp, L2I, L3I, L2Pexp, L3Pimp, T1, T2, c_tariff, Cost - nT1, Cost - nT2, L3Pexp, gas_usage, -T1, -T2, import, solar, pulstotal, export, voltage
 
 Public Class SmartMeter : Inherits Dictionary(Of String, Data)
-   Private iBase As IungoBase
+   Private ReadOnly iBase As IungoBase
    Public Data As DataLog
 
    Public Sub New(iBase As IungoBase)

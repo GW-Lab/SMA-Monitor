@@ -16,7 +16,7 @@
 
 Imports GWModBus
 Imports GWModBus.ModBusClient
-Imports GWIungo
+
 
 Public Class FrmSMAMonitor
    Const RemoveMSBMask As Byte = &B0111_1111
@@ -102,7 +102,7 @@ Public Class FrmSMAMonitor
                   Dim power = Await Me.SB3600TL.ReadInputAsync(30775, 2)                                                                              ' 30775 True Power -> Alternative: 308805 reactive power or apperent power 30813
                   power(0) = power(0) And RemoveMSBMask                                                                                               ' Remove sign bit
                   LblSunPowerVal.Text = ConvertToInt(power).ToString()                                                                                ' Power in W(att)
-                  LblUsedPowerVal.Text = (Me.iungo.Electricity("usage").Energy.Current + ConvertToInt(power)).ToString
+                  LblUsedPowerVal.Text = (Me.iungo.SmartMeter("usage").Energy.Current + ConvertToInt(power)).ToString
 
                   Dim totalUsedPower = CInt(LblSunPowerVal.Text) - CSng(LblUsedPowerVal.Text)
                   LblUsedPowerTotalVal.BackColor = If(totalUsedPower >= 0, Color.LightGreen, Color.Red)
