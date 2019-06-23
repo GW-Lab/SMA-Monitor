@@ -23,5 +23,11 @@
     <Setting Name="IP_SMA" Type="System.String" Scope="User">
       <Value Profile="(Default)">192.168.2.10</Value>
     </Setting>
+    <Setting Name="PVTresholdWatt" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">2500</Value>
+    </Setting>
+    <Setting Name="PVAutoHotWater" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

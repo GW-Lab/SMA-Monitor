@@ -16,12 +16,14 @@
 
 Imports GWModBus
 Imports GWModBus.ModBusClient
-
+Imports GWEnvilineClient
 
 Public Class FrmSMAMonitor
    Const RemoveMSBMask As Byte = &B0111_1111
    Private SB3600TL As ModBusClient
    Private iungo As IungoClient
+
+   Private WithEvents Enviline As EnvilineClient
 
    Private CurrDisplay As DisplayItem
    Private DisplayPower As Boolean = True
@@ -66,6 +68,8 @@ Public Class FrmSMAMonitor
          Me.SB3600TL.Connect()
 
          Me.iungo = New IungoClient(Net.IPAddress.Parse(My.Settings.IP_Iungo))
+         enviline = New EnvilineClient
+
          ' Me.iungo.ZWave.PowerSwitches("Iungo switch Name").State = PowerSwitch.PowerSwitchStatus.Off
 
          LblStatusValue.BackColor = Color.Green
@@ -108,6 +112,8 @@ Public Class FrmSMAMonitor
                   LblUsedPowerTotalVal.BackColor = If(totalUsedPower >= 0, Color.LightGreen, Color.Red)
                   LblUsedPowerTotalVal.ForeColor = If(totalUsedPower >= 0, Color.Black, Color.White)
                   LblUsedPowerTotalVal.Text = totalUsedPower.ToString
+
+                  Enviline.Send = If(ConvertToInt(power) > My.Settings.PVTresholdWatt, EnvilineClient.Weather.Blue_Sky, EnvilineClient.Weather.Cloudy)
 
                   Me.DisplayPower = False
                Else
@@ -152,5 +158,9 @@ Public Class FrmSMAMonitor
          LblDayYieldValue.Text = "0.0"
          LblTotalYieldValue.Text = "0.0"
       End Try
+   End Sub
+
+   Private Sub Enviline_Status_Changed(status As EnvilineClient.Weather) Handles Enviline.Status_Changed
+     LblHotWaterValue.BackColor = If(status = EnvilineClient.Weather.Blue_Sky  ,Color.Green,Color.Red)
    End Sub
 End Class

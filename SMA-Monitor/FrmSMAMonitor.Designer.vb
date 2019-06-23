@@ -49,6 +49,7 @@ Partial Class FrmSMAMonitor
       Me.LblUsedPowerVal = New System.Windows.Forms.Label()
       Me.Label1 = New System.Windows.Forms.Label()
       Me.LblUsedPowerTotalVal = New System.Windows.Forms.Label()
+      Me.LblHotWaterValue = New System.Windows.Forms.Label()
       Me.GroupBox1.SuspendLayout()
       Me.CmsMain.SuspendLayout()
       Me.SuspendLayout()
@@ -277,12 +278,23 @@ Partial Class FrmSMAMonitor
       Me.LblUsedPowerTotalVal.Text = "0"
       Me.LblUsedPowerTotalVal.TextAlign = System.Drawing.ContentAlignment.MiddleRight
       '
-      'FrmMain
+      'LblHotWaterValue
+      '
+      Me.LblHotWaterValue.BackColor = System.Drawing.Color.Red
+      Me.LblHotWaterValue.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+      Me.LblHotWaterValue.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+      Me.LblHotWaterValue.Location = New System.Drawing.Point(0, 9)
+      Me.LblHotWaterValue.Name = "LblHotWaterValue"
+      Me.LblHotWaterValue.Size = New System.Drawing.Size(8, 8)
+      Me.LblHotWaterValue.TabIndex = 34
+      '
+      'FrmSMAMonitor
       '
       Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
       Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
       Me.ClientSize = New System.Drawing.Size(110, 166)
       Me.ControlBox = False
+      Me.Controls.Add(Me.LblHotWaterValue)
       Me.Controls.Add(Me.Label1)
       Me.Controls.Add(Me.LblUsedPowerTotalVal)
       Me.Controls.Add(Me.LblUsedW)
@@ -301,7 +313,7 @@ Partial Class FrmSMAMonitor
       Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
       Me.MaximizeBox = False
       Me.MinimizeBox = False
-      Me.Name = "FrmMain"
+      Me.Name = "FrmSMAMonitor"
       Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide
       Me.Text = "SB 3600TL-21"
       Me.TopMost = True
@@ -338,4 +350,5 @@ Partial Class FrmSMAMonitor
    Friend WithEvents LblUsedPowerVal As Label
    Friend WithEvents Label1 As Label
    Friend WithEvents LblUsedPowerTotalVal As Label
+   Friend WithEvents LblHotWaterValue As Label
 End Class

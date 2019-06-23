@@ -12,6 +12,8 @@
    Private Sub FrmSettings_Load(sender As Object, e As EventArgs) Handles Me.Load
       NudInverval.Value = My.Settings.Interval
       NudModBusID.Value = My.Settings.ModBusID
+      NudPVTresholdWatt.Value = My.Settings.PVTresholdWatt
+      ChkPVAutoHotWater.Checked = My.Settings.PVAutoHotWater
       ChkTopMost.Checked = My.Settings.TopMost
 
       IpbSMA.Text = My.Settings.IP_SMA
@@ -23,6 +25,10 @@
    Private Sub BtnOK_Click(sender As Object, e As EventArgs) Handles btnOK.Click
       My.Settings.Interval = CInt(NudInverval.Value)
       My.Settings.ModBusID = CByte(NudModBusID.Value)
+
+      My.Settings.PVTresholdWatt = CInt(NudPVTresholdWatt.Value)
+      My.Settings.PVAutoHotWater = ChkPVAutoHotWater.Checked
+
       My.Settings.TopMost = ChkTopMost.Checked
 
       My.Settings.IP_SMA = IpbSMA.Text
