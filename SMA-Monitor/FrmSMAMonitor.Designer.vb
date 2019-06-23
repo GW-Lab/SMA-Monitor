@@ -283,7 +283,7 @@ Partial Class FrmSMAMonitor
       Me.LblHotWaterValue.BackColor = System.Drawing.Color.Red
       Me.LblHotWaterValue.FlatStyle = System.Windows.Forms.FlatStyle.Flat
       Me.LblHotWaterValue.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-      Me.LblHotWaterValue.Location = New System.Drawing.Point(0, 9)
+      Me.LblHotWaterValue.Location = New System.Drawing.Point(0, 11)
       Me.LblHotWaterValue.Name = "LblHotWaterValue"
       Me.LblHotWaterValue.Size = New System.Drawing.Size(8, 8)
       Me.LblHotWaterValue.TabIndex = 34

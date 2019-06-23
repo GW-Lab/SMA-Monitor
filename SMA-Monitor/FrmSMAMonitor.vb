@@ -107,8 +107,8 @@ Public Class FrmSMAMonitor
                   LblStatusValue.BackColor = Color.Green
 
                   Dim power = Me.SB3600TL.ReadInputAsync(30775, 2)                                                                              ' 30775 True Power -> Alternative: 308805 reactive power or apperent power 30813
-                  power(0) = power(0) And RemoveMSBMask                                                                                               ' Remove sign bit
-                  LblSunPowerVal.Text = ConvertToInt(power).ToString()                                                                                ' Power in W(att)
+                  power(0) = power(0) And RemoveMSBMask                                                                                         ' Remove sign bit
+                  LblSunPowerVal.Text = ConvertToInt(power).ToString()                                                                          ' Power in W(att)
                   LblUsedPowerVal.Text = (Me.iungo.SmartMeter("usage").Energy.Current + ConvertToInt(power)).ToString
 
                   Dim UnusedPowerTotal = CInt(LblSunPowerVal.Text) - CSng(LblUsedPowerVal.Text)
@@ -117,10 +117,7 @@ Public Class FrmSMAMonitor
                   LblUsedPowerTotalVal.Text = UnusedPowerTotal.ToString
 
                   If My.Settings.PVAutoHotWater Then
-
                      Enviline.Send = If(UnusedPowerTotal > My.Settings.PVTresholdWatt, EnvilineClient.Weather.Blue_Sky, EnvilineClient.Weather.Cloudy)
-                  Else
-                     LblHotWaterValue.Visible = False
                   End If
 
                   Me.DisplayPower = False
@@ -137,7 +134,7 @@ Public Class FrmSMAMonitor
                      Case DisplayItem.Temp
                         Dim temp = Me.SB3600TL.ReadInputAsync(34113, 2)                                                                         ' Get Temperature from the inverter register Number 34113 
                         ' Alternative: 30963
-                        temp(0) = temp(0) And RemoveMSBMask                                                                                           ' Remove sign bit
+                        temp(0) = temp(0) And RemoveMSBMask                                                                                     ' Remove sign bit
                         LblTempCelsiusValue.Text = (ConvertToInt(temp) / 10).ToString("#0.0")
                         Me.CurrDisplay = DisplayItem.DailyYield
                      Case DisplayItem.DailyYield
@@ -171,5 +168,9 @@ Public Class FrmSMAMonitor
    Private Sub Enviline_Status_Changed(status As EnvilineClient.Weather) Handles Enviline.Status_Changed
       LblHotWaterValue.Visible = My.Settings.PVAutoHotWater
       LblHotWaterValue.BackColor = If(status = EnvilineClient.Weather.Blue_Sky, Color.Green, Color.Red)
+   End Sub
+
+   Private Sub LblHotWaterValue_Click(sender As Object, e As EventArgs) Handles LblHotWaterValue.Click   ' Force one-time to make Hot water
+      Enviline.Send = EnvilineClient.Weather.Blue_Sky
    End Sub
 End Class
