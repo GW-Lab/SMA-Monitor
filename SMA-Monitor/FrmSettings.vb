@@ -34,7 +34,7 @@
       My.Settings.IP_SMA = IpbSMA.Text
       My.Settings.IP_Iungo = IpbIungo.Text
 
-      Me.frm.TmrMain.Interval = My.Settings.Interval
+      Me.frm.TmrMain.Interval = My.Settings.Interval * 1000
 
       Close()
    End Sub

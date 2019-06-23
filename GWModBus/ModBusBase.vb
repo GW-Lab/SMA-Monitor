@@ -30,7 +30,7 @@ Public Class ModBusBase : Inherits TcpClient
       End If
    End Sub
 
-   Public Async Function ReadHoldingAsync(startingAddress As UShort, quantity As UShort) As Task(Of Byte())             ' Read Holding Register(s) from Master device (FC3).
+   Public Function ReadHoldingAsync(startingAddress As UShort, quantity As UShort) As Byte()             ' Read Holding Register(s) from Master device (FC3).
       If Connected Then
          If startingAddress > Me.MaxRegisterAddresses OrElse quantity > Me.MaxRegistersToReadOrWrite Then Throw New ArgumentException($"Starting address must be 0 - {Me.MaxRegisterAddresses}; quantity must be 0 - {Me.MaxRegistersToReadOrWrite}")
 
@@ -48,10 +48,10 @@ Public Class ModBusBase : Inherits TcpClient
          Dim receiveBuffer As Byte() = {}                                                                               ' Create a Respons buffer
 
          If Client.Connected Then
-            Await Me.networkStream.WriteAsync(packet.ToArray, 0, packet.Count - 2)
+            Me.networkStream.Write(packet.ToArray, 0, packet.Count - 2)
 
             receiveBuffer = New Byte(quantity * 2 + 8) {}
-            Dim bytesReceived = Await Me.networkStream.ReadAsync(receiveBuffer, 0, receiveBuffer.Length)
+            Dim bytesReceived = Me.networkStream.ReadAsync(receiveBuffer, 0, receiveBuffer.Length)
          End If
 
          If receiveBuffer(7) = &H84 Then
@@ -72,7 +72,7 @@ Public Class ModBusBase : Inherits TcpClient
       End If
    End Function
 
-   Public Async Function ReadInputAsync(startingAddress As UShort, quantity As UShort) As Task(Of Byte())            ' Read Input Register(s) from Master device (FC3).
+   Public Function ReadInputAsync(startingAddress As UShort, quantity As UShort) As Byte()            ' Read Input Register(s) from Master device (FC3).
       If Connected Then
          If startingAddress > Me.MaxRegisterAddresses OrElse quantity > Me.MaxRegistersToReadOrWrite Then Throw New ArgumentException($"Starting address must be 0 - {Me.MaxRegisterAddresses}; quantity must be 0 - {Me.MaxRegistersToReadOrWrite}")
 
@@ -90,10 +90,10 @@ Public Class ModBusBase : Inherits TcpClient
          Dim receiveBuffer As Byte() = {}                                                             ' Create Respons a buffer
 
          If Client.Connected Then
-            Await Me.networkStream.WriteAsync(packet.ToArray, 0, packet.Count - 2)
+            Me.networkStream.Write(packet.ToArray, 0, packet.Count - 2)
 
             receiveBuffer = New Byte(quantity * 2 + 8) {}
-            Dim bytesReceived = Await Me.networkStream.ReadAsync(receiveBuffer, 0, receiveBuffer.Length)
+            Dim bytesReceived = Me.networkStream.Read(receiveBuffer, 0, receiveBuffer.Length)
          End If
 
          If receiveBuffer(7) = &H84 Then

@@ -287,6 +287,7 @@ Partial Class FrmSMAMonitor
       Me.LblHotWaterValue.Name = "LblHotWaterValue"
       Me.LblHotWaterValue.Size = New System.Drawing.Size(8, 8)
       Me.LblHotWaterValue.TabIndex = 34
+      Me.LblHotWaterValue.Visible = False
       '
       'FrmSMAMonitor
       '

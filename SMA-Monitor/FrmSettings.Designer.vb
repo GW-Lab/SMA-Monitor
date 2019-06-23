@@ -36,9 +36,9 @@ Partial Class FrmSettings
       Me.Label3 = New System.Windows.Forms.Label()
       Me.ChkPVAutoHotWater = New System.Windows.Forms.CheckBox()
       Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-      Me.NudPVTresholdWatt = New System.Windows.Forms.NumericUpDown()
-      Me.LblPVTresholdWatt = New System.Windows.Forms.Label()
       Me.Label4 = New System.Windows.Forms.Label()
+      Me.LblPVTresholdWatt = New System.Windows.Forms.Label()
+      Me.NudPVTresholdWatt = New System.Windows.Forms.NumericUpDown()
       Me.GroupBox2 = New System.Windows.Forms.GroupBox()
       CType(Me.NudInverval, System.ComponentModel.ISupportInitialize).BeginInit()
       CType(Me.NudModBusID, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -174,16 +174,14 @@ Partial Class FrmSettings
       Me.GroupBox1.TabStop = False
       Me.GroupBox1.Text = "PV system (SMA)"
       '
-      'NudPVTresholdWatt
+      'Label4
       '
-      Me.NudPVTresholdWatt.Increment = New Decimal(New Integer() {100, 0, 0, 0})
-      Me.NudPVTresholdWatt.Location = New System.Drawing.Point(79, 68)
-      Me.NudPVTresholdWatt.Maximum = New Decimal(New Integer() {4000, 0, 0, 0})
-      Me.NudPVTresholdWatt.Minimum = New Decimal(New Integer() {1500, 0, 0, 0})
-      Me.NudPVTresholdWatt.Name = "NudPVTresholdWatt"
-      Me.NudPVTresholdWatt.Size = New System.Drawing.Size(48, 20)
-      Me.NudPVTresholdWatt.TabIndex = 13
-      Me.NudPVTresholdWatt.Value = New Decimal(New Integer() {1500, 0, 0, 0})
+      Me.Label4.AutoSize = True
+      Me.Label4.Location = New System.Drawing.Point(133, 70)
+      Me.Label4.Name = "Label4"
+      Me.Label4.Size = New System.Drawing.Size(30, 13)
+      Me.Label4.TabIndex = 15
+      Me.Label4.Text = "Watt"
       '
       'LblPVTresholdWatt
       '
@@ -194,14 +192,16 @@ Partial Class FrmSettings
       Me.LblPVTresholdWatt.TabIndex = 14
       Me.LblPVTresholdWatt.Text = "Treshold:"
       '
-      'Label4
+      'NudPVTresholdWatt
       '
-      Me.Label4.AutoSize = True
-      Me.Label4.Location = New System.Drawing.Point(133, 70)
-      Me.Label4.Name = "Label4"
-      Me.Label4.Size = New System.Drawing.Size(30, 13)
-      Me.Label4.TabIndex = 15
-      Me.Label4.Text = "Watt"
+      Me.NudPVTresholdWatt.Increment = New Decimal(New Integer() {100, 0, 0, 0})
+      Me.NudPVTresholdWatt.Location = New System.Drawing.Point(79, 68)
+      Me.NudPVTresholdWatt.Maximum = New Decimal(New Integer() {4000, 0, 0, 0})
+      Me.NudPVTresholdWatt.Minimum = New Decimal(New Integer() {100, 0, 0, 0})
+      Me.NudPVTresholdWatt.Name = "NudPVTresholdWatt"
+      Me.NudPVTresholdWatt.Size = New System.Drawing.Size(48, 20)
+      Me.NudPVTresholdWatt.TabIndex = 13
+      Me.NudPVTresholdWatt.Value = New Decimal(New Integer() {1500, 0, 0, 0})
       '
       'GroupBox2
       '

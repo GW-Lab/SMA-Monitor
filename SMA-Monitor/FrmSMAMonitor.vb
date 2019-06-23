@@ -60,17 +60,20 @@ Public Class FrmSMAMonitor
    Private Sub FrmSB3600TLMonitor_Load() Handles Me.Load
       TopMost = My.Settings.TopMost
       Location = New Point(My.Settings.LocationX, My.Settings.LocationY)
+      TmrMain.Interval = My.Settings.Interval * 1000
 
       Me.CurrDisplay = DisplayItem.Volt
 
       Try
+
          Me.SB3600TL = New ModBusClient(My.Settings.ModBusID, Net.IPAddress.Parse(My.Settings.IP_SMA), 502)
          Me.SB3600TL.Connect()
 
          Me.iungo = New IungoClient(Net.IPAddress.Parse(My.Settings.IP_Iungo))
-         enviline = New EnvilineClient
-
          ' Me.iungo.ZWave.PowerSwitches("Iungo switch Name").State = PowerSwitch.PowerSwitchStatus.Off
+
+         Enviline = New EnvilineClient
+         Enviline.Send = EnvilineClient.Weather.Status
 
          LblStatusValue.BackColor = Color.Green
       Catch ex As Exception
@@ -96,47 +99,52 @@ Public Class FrmSMAMonitor
       Close()
    End Sub
 
-   Private Async Sub TmrMain_TickAsync(sender As Object, e As EventArgs) Handles TmrMain.Tick
+   Private Sub TmrMain_TickAsync(sender As Object, e As EventArgs) Handles TmrMain.Tick
       Try
-         Select Case ConvertToInt(Await Me.SB3600TL.ReadInputAsync(30201, 2))                                                                         ' Get Status from Inverter register number 30201
+         Select Case ConvertToInt(Me.SB3600TL.ReadInputAsync(30201, 2))                                                                         ' Get Status from Inverter register number 30201
             Case SB3600TLStatus.Ok
                If Me.DisplayPower Then
                   LblStatusValue.BackColor = Color.Green
 
-                  Dim power = Await Me.SB3600TL.ReadInputAsync(30775, 2)                                                                              ' 30775 True Power -> Alternative: 308805 reactive power or apperent power 30813
+                  Dim power = Me.SB3600TL.ReadInputAsync(30775, 2)                                                                              ' 30775 True Power -> Alternative: 308805 reactive power or apperent power 30813
                   power(0) = power(0) And RemoveMSBMask                                                                                               ' Remove sign bit
                   LblSunPowerVal.Text = ConvertToInt(power).ToString()                                                                                ' Power in W(att)
                   LblUsedPowerVal.Text = (Me.iungo.SmartMeter("usage").Energy.Current + ConvertToInt(power)).ToString
 
-                  Dim totalUsedPower = CInt(LblSunPowerVal.Text) - CSng(LblUsedPowerVal.Text)
-                  LblUsedPowerTotalVal.BackColor = If(totalUsedPower >= 0, Color.LightGreen, Color.Red)
-                  LblUsedPowerTotalVal.ForeColor = If(totalUsedPower >= 0, Color.Black, Color.White)
-                  LblUsedPowerTotalVal.Text = totalUsedPower.ToString
+                  Dim UnusedPowerTotal = CInt(LblSunPowerVal.Text) - CSng(LblUsedPowerVal.Text)
+                  LblUsedPowerTotalVal.BackColor = If(UnusedPowerTotal >= 0, Color.LightGreen, Color.Red)
+                  LblUsedPowerTotalVal.ForeColor = If(UnusedPowerTotal >= 0, Color.Black, Color.White)
+                  LblUsedPowerTotalVal.Text = UnusedPowerTotal.ToString
 
-                  Enviline.Send = If(ConvertToInt(power) > My.Settings.PVTresholdWatt, EnvilineClient.Weather.Blue_Sky, EnvilineClient.Weather.Cloudy)
+                  If My.Settings.PVAutoHotWater Then
+
+                     Enviline.Send = If(UnusedPowerTotal > My.Settings.PVTresholdWatt, EnvilineClient.Weather.Blue_Sky, EnvilineClient.Weather.Cloudy)
+                  Else
+                     LblHotWaterValue.Visible = False
+                  End If
 
                   Me.DisplayPower = False
                Else
                   Select Case Me.CurrDisplay
                      Case DisplayItem.Volt
-                        Dim voltage = Await Me.SB3600TL.ReadInputAsync(30783, 2)                                                                      ' Get voltage from the inverter register number 30783
+                        Dim voltage = Me.SB3600TL.ReadInputAsync(30783, 2)                                                                      ' Get voltage from the inverter register number 30783
                         LblVoltageValue.Text = (ConvertToInt(voltage) / 100).ToString("#0.0")
                         Me.CurrDisplay = DisplayItem.Ampere
                      Case DisplayItem.Ampere
-                        Dim ampere = Await Me.SB3600TL.ReadInputAsync(30795, 2)                                                                       ' Get ampere from the inverter register number 30795
+                        Dim ampere = Me.SB3600TL.ReadInputAsync(30795, 2)                                                                       ' Get ampere from the inverter register number 30795
                         LblAmpereValue.Text = (ConvertToInt(ampere) / 1000).ToString("#0.0")
                         Me.CurrDisplay = DisplayItem.Temp
                      Case DisplayItem.Temp
-                        Dim temp = Await Me.SB3600TL.ReadInputAsync(34113, 2)                                                                         ' Get Temperature from the inverter register Number 34113 
+                        Dim temp = Me.SB3600TL.ReadInputAsync(34113, 2)                                                                         ' Get Temperature from the inverter register Number 34113 
                         ' Alternative: 30963
                         temp(0) = temp(0) And RemoveMSBMask                                                                                           ' Remove sign bit
                         LblTempCelsiusValue.Text = (ConvertToInt(temp) / 10).ToString("#0.0")
                         Me.CurrDisplay = DisplayItem.DailyYield
                      Case DisplayItem.DailyYield
-                        LblDayYieldValue.Text = (ConvertToLong(Await Me.SB3600TL.ReadInputAsync(30517, 4)) / 1000).ToString("#0.00")                  ' Get Total-day-yield (kWh) from the inverter register Number 30517 
+                        LblDayYieldValue.Text = (ConvertToLong(Me.SB3600TL.ReadInputAsync(30517, 4)) / 1000).ToString("#0.00")                  ' Get Total-day-yield (kWh) from the inverter register Number 30517 
                         Me.CurrDisplay = DisplayItem.TotalYield
                      Case DisplayItem.TotalYield
-                        LblTotalYieldValue.Text = (ConvertToLong(Await Me.SB3600TL.ReadInputAsync(30513, 4)) / 1000000).ToString("##0.00")            ' Get Total-yield (kWh) from the inverter register Number 30513 
+                        LblTotalYieldValue.Text = (ConvertToLong(Me.SB3600TL.ReadInputAsync(30513, 4)) / 1000000).ToString("##0.00")            ' Get Total-yield (kWh) from the inverter register Number 30513 
                         Me.CurrDisplay = DisplayItem.Volt
                   End Select
 
@@ -161,6 +169,7 @@ Public Class FrmSMAMonitor
    End Sub
 
    Private Sub Enviline_Status_Changed(status As EnvilineClient.Weather) Handles Enviline.Status_Changed
-     LblHotWaterValue.BackColor = If(status = EnvilineClient.Weather.Blue_Sky  ,Color.Green,Color.Red)
+      LblHotWaterValue.Visible = My.Settings.PVAutoHotWater
+      LblHotWaterValue.BackColor = If(status = EnvilineClient.Weather.Blue_Sky, Color.Green, Color.Red)
    End Sub
 End Class
