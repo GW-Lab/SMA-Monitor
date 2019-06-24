@@ -31,6 +31,8 @@ For people that are intrerested in domotica:
 There is also the posibility to monitor live the power usages of your home via the Iungo-Energy-manager (https://www.iungo.nl/nl/)
 and operate some ZWave switches to power a electrical devices.
 
+Also the posibility to send a massage to a RasberryPI to operate a GrovePI+ Relay that is connected to a Enviline HP and instruct it to make extra hot water.
+
 How to use Iungo ZWave switches:
 1. Me.iungo = New IungoClient(Net.IPAddress.Parse(My.Settings.IP_Iungo))
 2. Me.iungo.ZWave.PowerSwitches("Iungo-switch-Name").State = PowerSwitch.PowerSwitchStatus.Off
