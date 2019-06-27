@@ -73,7 +73,7 @@ Public Class FrmSMAMonitor
          ' Me.iungo.ZWave.PowerSwitches("Iungo switch Name").State = PowerSwitch.PowerSwitchStatus.Off
 
          Enviline = New EnvilineClient
-         Enviline.Send = EnvilineClient.Weather.Status
+         Enviline.Send = EnvilineClient.Sunpower.Status
 
          LblStatusValue.BackColor = Color.Green
       Catch ex As Exception
@@ -117,7 +117,7 @@ Public Class FrmSMAMonitor
                   LblUsedPowerTotalVal.Text = UnusedPowerTotal.ToString
 
                   If My.Settings.PVAutoHotWater Then
-                     Enviline.Send = If(UnusedPowerTotal > My.Settings.PVTresholdWatt, EnvilineClient.Weather.Blue_Sky, EnvilineClient.Weather.Cloudy)
+                     Enviline.Send = If(UnusedPowerTotal > My.Settings.PVTresholdWatt, EnvilineClient.Sunpower.Plus, EnvilineClient.Sunpower.Min)
                   End If
 
                   Me.DisplayPower = False
@@ -165,12 +165,12 @@ Public Class FrmSMAMonitor
       End Try
    End Sub
 
-   Private Sub Enviline_Status_Changed(status As EnvilineClient.Weather) Handles Enviline.Status_Changed
+   Private Sub Enviline_Status_Changed(status As EnvilineClient.Sunpower) Handles Enviline.Status_Changed
       LblHotWaterValue.Visible = My.Settings.PVAutoHotWater
-      LblHotWaterValue.BackColor = If(status = EnvilineClient.Weather.Blue_Sky, Color.Green, Color.Red)
+      LblHotWaterValue.BackColor = If(status = EnvilineClient.Sunpower.Plus, Color.Green, Color.Red)
    End Sub
 
    Private Sub LblHotWaterValue_Click(sender As Object, e As EventArgs) Handles LblHotWaterValue.Click   ' Force one-time to make Hot water
-      Enviline.Send = EnvilineClient.Weather.Blue_Sky
+      Enviline.Send = EnvilineClient.Sunpower.Plus
    End Sub
 End Class

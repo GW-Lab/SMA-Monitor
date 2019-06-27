@@ -14,20 +14,20 @@ Imports System.Text
 
 Public Class EnvilineClient
    Const timeOut = 2000                                                          ' Udp communication 2 seconds timeout
-   Private Status As Weather = Weather.Cloudy
+   Private Status As Sunpower = Sunpower.Min
    Private ReadOnly port As Integer = 8888
 
-   Public Event Status_Changed(status As Weather)
+   Public Event Status_Changed(status As Sunpower)
 
-   Public Enum Weather
-      Cloudy
-      Blue_Sky
+   Public Enum Sunpower
+      Min
+      Plus
       Status
    End Enum
 
-   Public WriteOnly Property Send As Weather
-      Set(value As Weather)
-         If value <> Me.Status Then BroadcastMsg(value.ToString) ' Prevent unnecessary server calls
+   Public WriteOnly Property Send As Sunpower
+      Set(value As Sunpower)
+         If value <> Me.Status Then BroadcastMsg(If(value = Sunpower.Min, "sunpower-", "sunpower+")) ' Prevent unnecessary server calls
       End Set
    End Property
 
@@ -48,9 +48,9 @@ Public Class EnvilineClient
          Dim serverReply = Encoding.ASCII.GetString(udpClient.Receive(ServerEp)) ' Wait for reply
 
          Select Case serverReply.ToLower
-            Case "blue_sky" : Me.Status = Weather.Blue_Sky
-            Case "cloudy" : Me.Status = Weather.Cloudy
-            Case Else : Me.Status = Weather.Status
+            Case "sunpower+" : Me.Status = Sunpower.Plus
+            Case "sunpower-" : Me.Status = Sunpower.Min
+            Case Else : Me.Status = Sunpower.Status
          End Select
       End Using
 
